@@ -1,5 +1,5 @@
 // dominio/Recrutador.java
-package dominio;
+package com.tp1.GestaoRH.dominio;
 
 public class Recrutador {
     private String nome;

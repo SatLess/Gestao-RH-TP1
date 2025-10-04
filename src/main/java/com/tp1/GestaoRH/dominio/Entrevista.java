@@ -1,5 +1,5 @@
 // dominio/Entrevista.java
-package dominio;
+package com.tp1.GestaoRH.dominio;
 
 import java.time.LocalDate;
 

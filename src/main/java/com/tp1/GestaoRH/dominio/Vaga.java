@@ -1,6 +1,7 @@
 // dominio/Vaga.java
-package dominio;
+package com.tp1.GestaoRH.dominio;
 
+import com.tp1.GestaoRH.Misc.Constantes;
 import java.time.LocalDate;
 
 public class Vaga {
@@ -8,10 +9,10 @@ public class Vaga {
     private String cargo;
     private double salarioBase;
     private String departamento;
-    private String status; // "Aberta" ou "Fechada"
+    private Constantes.STATUS status; // "Aberta" ou "Fechada"
     private LocalDate dataAbertura;
 
-    public Vaga(int id, String cargo, double salarioBase, String departamento, String status, LocalDate dataAbertura) {
+    public Vaga(int id, String cargo, double salarioBase, String departamento, Constantes.STATUS status, LocalDate dataAbertura) {
         this.id = id;
         this.cargo = cargo;
         this.salarioBase = salarioBase;
@@ -25,11 +26,11 @@ public class Vaga {
     public String getCargo() { return cargo; }
     public double getSalarioBase() { return salarioBase; }
     public String getDepartamento() { return departamento; }
-    public String getStatus() { return status; }
+    public Constantes.STATUS getStatus() { return status; }
     public LocalDate getDataAbertura() { return dataAbertura; }
 
     // Setters
-    public void setStatus(String status) { this.status = status; }
+    public void setStatus(Constantes.STATUS status) { this.status = status; }
     public void setSalarioBase(double salarioBase) { this.salarioBase = salarioBase; }
 
     // Método auxiliar para exibir informações resumidas

@@ -1,6 +1,6 @@
-package UI;
+package com.tp1.GestaoRH.UI;
 
-import dominio.Vaga;
+import com.tp1.GestaoRH.dominio.Vaga;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
