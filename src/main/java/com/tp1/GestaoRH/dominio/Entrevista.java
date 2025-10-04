@@ -5,12 +5,12 @@ import java.time.LocalDate;
 
 public class Entrevista {
     private Vaga vaga;
-    private String candidato;
+   private Candidato candidato;
     private LocalDate data;
-    private String avaliador;
+    private Recrutador avaliador;
     private double nota;
 
-    public Entrevista(Vaga vaga, String candidato, LocalDate data, String avaliador, double nota) {
+    public Entrevista(Vaga vaga, Candidato candidato, LocalDate data, Recrutador avaliador, double nota) {
         this.vaga = vaga;
         this.candidato = candidato;
         this.data = data;
@@ -20,9 +20,8 @@ public class Entrevista {
 
     // Getters
     public Vaga getVaga() { return vaga; }
-    public String getCandidato() { return candidato; }
+    public Candidato getCandidato() { return candidato; }
     public LocalDate getData() { return data; }
-    public String getAvaliador() { return avaliador; }
     public double getNota() { return nota; }
 
     // Setters (se precisar mudar depois)
@@ -31,10 +30,10 @@ public class Entrevista {
 
     @Override
     public String toString() {
-        return "Entrevista [Candidato=" + candidato +
+        return "Entrevista [Candidato=" + candidato.getNome() +
                ", Vaga=" + vaga.getCargo() +
                ", Data=" + data +
-               ", Avaliador=" + avaliador +
+               ", Avaliador=" + avaliador.getNome() +
                ", Nota=" + nota + "]";
     }
 }
