@@ -11,6 +11,12 @@ public class Constantes {
         APROVADO,
         REJEITADO
     }
+
+        public enum CANDIDATOSTATUS{
+        EM_ANALISE,
+        REJEITADO,
+        APROVADO,
+    }
     
     public static final String PATHCANDIDATOS = "candidatos.txt";
 }

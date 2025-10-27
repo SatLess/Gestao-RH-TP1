@@ -4,12 +4,16 @@
  */
 package com.tp1.GestaoRH.Misc;
 import com.tp1.GestaoRH.Candidatura.Candidato;
+import com.tp1.GestaoRH.Candidatura.Candidatura;
+import com.tp1.GestaoRH.Misc.Constantes.STATUS;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
+import java.io.ObjectInputFilter.Status;
+import java.time.LocalDate;
 
 import com.tp1.GestaoRH.dominio.Vaga;
 import java.io.File;
@@ -22,18 +26,18 @@ import java.util.ArrayList;
 public class Helper {
 
     private static Helper instance;
-    private ArrayList<Candidato> candidatos = new ArrayList<Candidato>();
+    private ArrayList<Candidatura> candidaturas = new ArrayList<Candidatura>();
 
-    public ArrayList<Candidato> getCandidatos() {
+    public ArrayList<Candidatura> getCandidatura() {
         if (new File("candidatos.txt").exists() == true){
-           candidatos = (ArrayList<Candidato>) loadObject("candidatos.txt");
+           candidaturas = (ArrayList<Candidatura>) loadObject("candidatos.txt");
         }
-        return candidatos;
+        return candidaturas;
         
     }
 
     public static Vaga acharVagaSelecionada(int index){
-        return null;
+        return new Vaga(index,"test",10,"test",STATUS.ABERTA, LocalDate.now());
     }
 
     public void saveObject(Object obj, String path){

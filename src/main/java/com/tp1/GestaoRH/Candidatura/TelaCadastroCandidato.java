@@ -113,6 +113,17 @@ public class TelaCadastroCandidato extends javax.swing.JFrame {
                 CPFActionPerformed(evt);
             }
         });
+        CPF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TelaCadastroCandidato.this.keyTyped(evt);
+            }
+        });
+
+        Telefone.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TelaCadastroCandidato.this.keyTyped(evt);
+            }
+        });
 
         jLabel6.setText("Email");
 
@@ -248,17 +259,55 @@ public class TelaCadastroCandidato extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_NomeActionPerformed
 
+    private boolean validarCPF(){
+        String s =CPF.getText();
+        int primeiro = 0;
+        int segundo = 0;
+        int peso = 10;
+        for (int i = 0; i < 9; i++){
+            int num = (int) (s.charAt(i) - 48);
+            primeiro += num * peso;
+            peso -= 1;
+        }
+             int resto = 11 - (primeiro % 11);
+            if (resto == 10 || resto == 11) primeiro = 0;  
+            else primeiro = resto;
+        
+        peso = 11;
+        for (int i = 0; i < 10; i++){
+             int num = (int) (s.charAt(i) - 48);
+            segundo += num * peso;
+            peso -= 1;
+        }
+
+        resto = 11 - (segundo % 11);
+            if (resto == 10 || resto == 11) segundo = 0;  
+            else segundo = resto;
+        
+            if ((int)(s.charAt(9) - 48) == primeiro && (int)(s.charAt(10) - 48) == segundo){
+                return true;
+            }
+            return false;
+
+    }
+
     private void ConcluirCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConcluirCadastroActionPerformed
         if ((Salario.getText().isBlank() || Horario.getText().isBlank() || Nome.getText().isBlank() || Email.getText().isBlank() || Endereco.getText().isBlank() ||  CPF.getText().isBlank())){
             JOptionPane.showMessageDialog(rootPane, "Preencha todos os campos obrigatórios!", "Erro de Cadastro", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        if (validarCPF() == false){
+JOptionPane.showMessageDialog(rootPane, "Cpf Inválido!", "Erro de Cadastro", JOptionPane.ERROR_MESSAGE);
+return;
+        }
         Candidato novoCandidato = new Candidato(Salario.getText(), Helper.acharVagaSelecionada(Vaga.getSelectedIndex()), Horario.getText(), Formacao.getText(), this.documentacao, Nome.getText(), Email.getText(), Endereco.getText(), CPF.getText());
-        ArrayList<Candidato> c = Helper.getInstance().getCandidatos();
-        c.add(novoCandidato);
+        Candidatura candidatura = new Candidatura(novoCandidato, Helper.acharVagaSelecionada(Vaga.getSelectedIndex()));
+        candidatura.setStatus(Constantes.CANDIDATOSTATUS.EM_ANALISE);
+        ArrayList<Candidatura> c = Helper.getInstance().getCandidatura();
+        c.add(candidatura);
         Helper.getInstance().saveObject(c, Constantes.PATHCANDIDATOS);
-        System.out.println(Helper.getInstance().getCandidatos().size());
         JOptionPane.showMessageDialog(rootPane, "Usuário cadastrado em " + LocalDate.now(), "Cadastro Efetuado", JOptionPane.INFORMATION_MESSAGE);
+        System.out.println(Helper.getInstance().getCandidatura());
     }//GEN-LAST:event_ConcluirCadastroActionPerformed
 
     private void jbtnAddDocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAddDocumentoActionPerformed
@@ -268,6 +317,12 @@ public class TelaCadastroCandidato extends javax.swing.JFrame {
     private void CPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CPFActionPerformed
         
     }//GEN-LAST:event_CPFActionPerformed
+
+    private void keyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_keyTyped
+              String num = "0123456789";
+        if (num.indexOf(evt.getKeyChar()) == -1){
+        evt.consume(); }
+    }//GEN-LAST:event_keyTyped
 
     /**
      * @param args the command line arguments

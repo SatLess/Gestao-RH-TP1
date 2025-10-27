@@ -5,17 +5,24 @@
 package com.tp1.GestaoRH.Candidatura;
 
 import com.tp1.GestaoRH.Misc.Constantes;
+import com.tp1.GestaoRH.Misc.Constantes.CANDIDATOSTATUS;
 import com.tp1.GestaoRH.dominio.Vaga;
+import java.io.Serializable;
+import java.lang.reflect.InaccessibleObjectException;
+import java.security.InvalidParameterException;
+
+import javax.swing.JPanel;
 
 /**
  *
  * @author spiri
  */
-public class Candidatura {
+public class Candidatura implements Serializable {
 
     public Candidatura(Candidato candidato, Vaga vaga) {
         this.candidato = candidato;
         this.vaga = vaga;
+        this.status = Constantes.CANDIDATOSTATUS.EM_ANALISE;
     }
 
     public Candidato getCandidato() {
@@ -34,14 +41,40 @@ public class Candidatura {
         this.vaga = vaga;
     }
 
-    public Constantes.STATUS getStatus() {
-        return status;
+    public String getStatus() {
+        switch (this.status) {
+            case Constantes.CANDIDATOSTATUS.APROVADO:
+                return new String("Aprovado");
+            
+            case Constantes.CANDIDATOSTATUS.EM_ANALISE:
+                return "Em Analise";
+        
+            default:
+                return "Rejeitado";
+        }
     }
 
-    public void setStatus(Constantes.STATUS status) {
+    public void setStatus(Constantes.CANDIDATOSTATUS status) {
         this.status = status;
     }
+
+    
+    public void setStatus(String status) throws InvalidParameterException {
+        if (status.toLowerCase().equals("em analise")){
+            this.status  = CANDIDATOSTATUS.EM_ANALISE;
+        }
+        else if (status.toLowerCase().equals("rejeitado")) {
+            this.status = CANDIDATOSTATUS.REJEITADO;
+        }
+        else if (status.toLowerCase().equals("aprovado"))  {
+            this.status = CANDIDATOSTATUS.APROVADO;
+        }
+        else {
+            throw new InaccessibleObjectException("Erro: Status da candidatura inválida");
+        }
+    }
+
     Candidato candidato;
     Vaga vaga;
-    Constantes.STATUS status;
+    Constantes.CANDIDATOSTATUS status;
 }
