@@ -4,11 +4,13 @@
  */
 package com.tp1.GestaoRH.dominio;
 
+import java.io.Serializable;
+
 /**
  *
  * @author spiri
  */
-public class Pessoa {
+public abstract class Pessoa implements Serializable {
     private String nome;
     private String email;
     private String endereço;
@@ -18,7 +20,7 @@ public class Pessoa {
         this.nome = nome;
         this.email = email;
         this.endereço = endereço;
-        this.cpf = cpf;
+        this.cpf = cpf; //Implementar checagem de cpf
     }
     
         // Getters e Setters

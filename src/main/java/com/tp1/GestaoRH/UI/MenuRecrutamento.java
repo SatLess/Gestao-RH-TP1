@@ -4,6 +4,9 @@
  */
 package com.tp1.GestaoRH.UI;
 
+import com.tp1.GestaoRH.Candidatura.TelaBuscaCandidato;
+import com.tp1.GestaoRH.Candidatura.TelaCandidatura;
+import com.tp1.GestaoRH.Candidatura.TelaCadastroCandidato;
 import com.tp1.GestaoRH.*;
 import com.tp1.GestaoRH.UI.RecrutamentoCadastroVagaTela;
 import javax.swing.*;

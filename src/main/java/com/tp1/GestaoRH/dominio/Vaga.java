@@ -2,9 +2,10 @@
 package com.tp1.GestaoRH.dominio;
 
 import com.tp1.GestaoRH.Misc.Constantes;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Vaga {
+public class Vaga implements Serializable {
     private int id;
     private String cargo;
     private double salarioBase;

@@ -11,4 +11,6 @@ public class Constantes {
         APROVADO,
         REJEITADO
     }
+    
+    public static final String PATHCANDIDATOS = "candidatos.txt";
 }
