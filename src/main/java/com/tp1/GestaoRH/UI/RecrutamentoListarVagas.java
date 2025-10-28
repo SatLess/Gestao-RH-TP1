@@ -1,5 +1,6 @@
 package com.tp1.GestaoRH.UI;
 
+import com.tp1.GestaoRH.dominio.RecrutamentoPersistencia;
 import com.tp1.GestaoRH.dominio.Vaga;
 
 import javax.swing.*;
@@ -109,10 +110,23 @@ public class RecrutamentoListarVagas extends JFrame {
      *  No futuro, aqui você chamará RepositorioVagas.getAll() e passará para setVagas(...)
      */
     private void atualizarTabela() {
+        try {
+
+        // 1️⃣ Carrega as vagas do arquivo
+        List<Vaga> vagas = RecrutamentoPersistencia.carregarVagas();
+
+        
+        setVagas(vagas);
+
+        
         JOptionPane.showMessageDialog(this,
-                "Atualizar: ainda sem persistência implementada.\n" +
-                "No futuro, chame o repositório (RepositorioVagas) e use setVagas(lista).",
+                "✅ Lista de vagas atualizada com sucesso!\nTotal de vagas: " + vagas.size(),
                 "Atualizar", JOptionPane.INFORMATION_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+                "❌ Erro ao carregar vagas: " + e.getMessage(),
+                "Erro", JOptionPane.ERROR_MESSAGE);
+    }
     }
 
     // Main para testes isolados

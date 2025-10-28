@@ -1,10 +1,17 @@
 package com.tp1.GestaoRH.UI;
 
+import com.tp1.GestaoRH.dominio.RecrutamentoPersistencia;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
+import com.tp1.GestaoRH.Misc.Constantes;
+import com.tp1.GestaoRH.dominio.Vaga;
 import java.awt.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class RecrutamentoCadastroVagaTela extends JFrame {
+
     private JTextField txtId, txtCargo, txtSalario, txtDepartamento;
     private JComboBox<String> cmbStatus;
     private JFormattedTextField txtData;
@@ -17,11 +24,10 @@ public class RecrutamentoCadastroVagaTela extends JFrame {
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8); 
-        gbc.anchor = GridBagConstraints.WEST; 
+        gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
-
         int linha = 0;
 
         // ID
@@ -80,11 +86,46 @@ public class RecrutamentoCadastroVagaTela extends JFrame {
         // Botão Salvar
         linha++;
         gbc.gridx = 0; gbc.gridy = linha; gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER; // centraliza o botão
+        gbc.anchor = GridBagConstraints.CENTER;
         JButton btnSalvar = new JButton("Salvar");
+
+        // Ação do botão
+        btnSalvar.addActionListener(e -> {
+            try {
+                int id = Integer.parseInt(txtId.getText());
+                String cargo = txtCargo.getText();
+                double salario = Double.parseDouble(txtSalario.getText());
+                String departamento = txtDepartamento.getText();
+                String statusStr = (String) cmbStatus.getSelectedItem();
+                Constantes.STATUS status = statusStr.equals("Aberta") ? Constantes.STATUS.ABERTA : Constantes.STATUS.FECHADA;
+                LocalDate data = LocalDate.parse(txtData.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+                // Cria a vaga
+                Vaga novaVaga = new Vaga(id, cargo, salario, departamento, status, data);
+
+                // Carrega lista e adiciona nova vaga
+                List<Vaga> vagas = RecrutamentoPersistencia.carregarVagas();
+                vagas.add(novaVaga);
+                RecrutamentoPersistencia.salvarVagas(vagas);
+
+                JOptionPane.showMessageDialog(this, "✅ Vaga cadastrada com sucesso!");
+
+                // Limpa os campos
+                txtId.setText("");
+                txtCargo.setText("");
+                txtSalario.setText("");
+                txtDepartamento.setText("");
+                txtData.setText("");
+                cmbStatus.setSelectedIndex(0);
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "❌ Erro ao salvar vaga: " + ex.getMessage());
+            }
+        });
+
         panel.add(btnSalvar, gbc);
 
-        // Centralizar o painel na vertical
+        // Centralizar painel
         getContentPane().setLayout(new GridBagLayout());
         GridBagConstraints center = new GridBagConstraints();
         center.gridx = 0;
