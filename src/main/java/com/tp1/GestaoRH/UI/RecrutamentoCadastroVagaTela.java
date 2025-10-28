@@ -12,7 +12,7 @@ import java.util.List;
 
 public class RecrutamentoCadastroVagaTela extends JFrame {
 
-    private JTextField txtId, txtCargo, txtSalario, txtDepartamento;
+    private JTextField txtId, txtCargo, txtDepartamento, txtSalario;
     private JComboBox<String> cmbStatus;
     private JFormattedTextField txtData;
 
@@ -50,7 +50,23 @@ public class RecrutamentoCadastroVagaTela extends JFrame {
         gbc.gridx = 0; gbc.gridy = linha;
         panel.add(new JLabel("Salário:"), gbc);
         gbc.gridx = 1;
+
         txtSalario = new JTextField(20);
+        txtSalario.setHorizontalAlignment(JTextField.RIGHT);
+        txtSalario.setText("0,00");
+
+        // Comportamento monetário ao digitar
+        txtSalario.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyReleased(java.awt.event.KeyEvent e) {
+                String texto = txtSalario.getText().replaceAll("[^0-9]", "");
+                if (texto.isEmpty()) texto = "0";
+                double valor = Double.parseDouble(texto) / 100.0;
+                java.text.DecimalFormat df = new java.text.DecimalFormat("#,##0.00");
+                txtSalario.setText(df.format(valor));
+            }
+        });
+
         panel.add(txtSalario, gbc);
 
         // Departamento
@@ -94,10 +110,17 @@ public class RecrutamentoCadastroVagaTela extends JFrame {
             try {
                 int id = Integer.parseInt(txtId.getText());
                 String cargo = txtCargo.getText();
-                double salario = Double.parseDouble(txtSalario.getText());
+
+                // Lê o valor formatado corretamente
+                double salario = Double.parseDouble(
+                        txtSalario.getText().replace(".", "").replace(",", ".")
+                );
+
                 String departamento = txtDepartamento.getText();
                 String statusStr = (String) cmbStatus.getSelectedItem();
-                Constantes.STATUS status = statusStr.equals("Aberta") ? Constantes.STATUS.ABERTA : Constantes.STATUS.FECHADA;
+                Constantes.STATUS status = statusStr.equals("Aberta")
+                        ? Constantes.STATUS.ABERTA
+                        : Constantes.STATUS.FECHADA;
                 LocalDate data = LocalDate.parse(txtData.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
                 // Cria a vaga
@@ -113,7 +136,7 @@ public class RecrutamentoCadastroVagaTela extends JFrame {
                 // Limpa os campos
                 txtId.setText("");
                 txtCargo.setText("");
-                txtSalario.setText("");
+                txtSalario.setText("0,00");
                 txtDepartamento.setText("");
                 txtData.setText("");
                 cmbStatus.setSelectedIndex(0);
