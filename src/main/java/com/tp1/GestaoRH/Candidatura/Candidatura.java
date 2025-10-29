@@ -53,6 +53,7 @@ public class Candidatura implements Serializable {
                 return "Rejeitado";
         }
     }
+    
 
     public void setStatus(Constantes.CANDIDATOSTATUS status) {
         this.status = status;

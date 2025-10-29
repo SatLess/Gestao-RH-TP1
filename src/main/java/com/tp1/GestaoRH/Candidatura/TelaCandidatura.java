@@ -24,6 +24,7 @@ public class TelaCandidatura extends javax.swing.JFrame {
      */
     public TelaCandidatura() {
         initComponents();
+        Helper.getInstance().listarVagas(Vaga);
     }
 
     /**
@@ -41,7 +42,7 @@ public class TelaCandidatura extends javax.swing.JFrame {
         jbtnAddDocumento1 = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jTextField8 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        Vaga = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -68,8 +69,6 @@ public class TelaCandidatura extends javax.swing.JFrame {
         });
 
         jLabel11.setText("Pretensão Salarial");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel12.setText("Dados Relativos à Vaga:");
 
@@ -130,7 +129,7 @@ public class TelaCandidatura extends javax.swing.JFrame {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                        .addComponent(Vaga, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addComponent(jLabel12))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(45, 45, 45)
@@ -155,7 +154,7 @@ public class TelaCandidatura extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Vaga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -195,21 +194,34 @@ public class TelaCandidatura extends javax.swing.JFrame {
     private void jbtnAddDocumento1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAddDocumento1ActionPerformed
        ArrayList<Candidatura> c = Helper.getInstance().getCandidatura();
        Candidato k = null;
-        for (Candidatura candidatura : c) {
+       
+       try {        for (Candidatura candidatura : c) {
             if (candidatura.getCandidato().getCpf().equals(cpf.getText())){
+                if (candidatura.getVaga() == Helper.getInstance().vagaSelecionada(Vaga.getItemAt(Vaga.getSelectedIndex()))){
+                JOptionPane.showMessageDialog(rootPane, "Candidato só pode ser insrito uma vez para cada vaga.", "Inserção Falhou", JOptionPane.ERROR_MESSAGE);
+                return;
+                }
                 k = candidatura.getCandidato();
                 break;
             }
         }
-        if (k == null){
+       
+         if (k == null){
               JOptionPane.showMessageDialog(rootPane, "CPF não econtrado no sistema.", "Inserção Falhou", JOptionPane.ERROR_MESSAGE);
         }
         else {
-            Candidatura nova = new Candidatura(k, Helper.getInstance().acharVagaSelecionada(0)); //Alterar isso
+            
+            Candidatura nova = new Candidatura(k, Helper.getInstance().vagaSelecionada(Vaga.getItemAt(Vaga.getSelectedIndex()))); //Alterar isso
             c.add(nova);
             Helper.getInstance().saveObject(c, Constantes.PATHCANDIDATOS);
               JOptionPane.showMessageDialog(rootPane, "Usuário adicionado à vaga em " + LocalDate.now(), "Inserção Efetuada", JOptionPane.INFORMATION_MESSAGE);
         }
+       
+       } 
+       catch (Exception e) {
+       
+        JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Inserção Falhou", JOptionPane.ERROR_MESSAGE);
+       }
 
       
     }//GEN-LAST:event_jbtnAddDocumento1ActionPerformed
@@ -252,8 +264,8 @@ public class TelaCandidatura extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> Vaga;
     private javax.swing.JTextField cpf;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;

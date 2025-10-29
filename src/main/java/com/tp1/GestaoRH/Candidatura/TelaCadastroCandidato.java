@@ -27,6 +27,7 @@ public class TelaCadastroCandidato extends javax.swing.JFrame {
     public TelaCadastroCandidato() {
         initComponents();
         setLocationRelativeTo(null);
+        Helper.getInstance().listarVagas(Vaga);
     }
 
     /**
@@ -104,7 +105,11 @@ public class TelaCadastroCandidato extends javax.swing.JFrame {
 
         jLabel11.setText("Pretensão Salarial");
 
-        Vaga.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        Vaga.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VagaActionPerformed(evt);
+            }
+        });
 
         jLabel12.setText("Dados Relativos à Vaga:");
 
@@ -300,14 +305,18 @@ public class TelaCadastroCandidato extends javax.swing.JFrame {
 JOptionPane.showMessageDialog(rootPane, "Cpf Inválido!", "Erro de Cadastro", JOptionPane.ERROR_MESSAGE);
 return;
         }
-        Candidato novoCandidato = new Candidato(Salario.getText(), Helper.acharVagaSelecionada(Vaga.getSelectedIndex()), Horario.getText(), Formacao.getText(), this.documentacao, Nome.getText(), Email.getText(), Endereco.getText(), CPF.getText());
-        Candidatura candidatura = new Candidatura(novoCandidato, Helper.acharVagaSelecionada(Vaga.getSelectedIndex()));
+        try {
+        Candidato novoCandidato = new Candidato(Salario.getText(), Helper.getInstance().vagaSelecionada(Vaga.getItemAt(Vaga.getSelectedIndex())), Horario.getText(), Formacao.getText(), this.documentacao, Nome.getText(), Email.getText(), Endereco.getText(), CPF.getText());
+        Candidatura candidatura = new Candidatura(novoCandidato, Helper.getInstance().vagaSelecionada(Vaga.getItemAt(Vaga.getSelectedIndex())));
         candidatura.setStatus(Constantes.CANDIDATOSTATUS.EM_ANALISE);
         ArrayList<Candidatura> c = Helper.getInstance().getCandidatura();
         c.add(candidatura);
         Helper.getInstance().saveObject(c, Constantes.PATHCANDIDATOS);
         JOptionPane.showMessageDialog(rootPane, "Usuário cadastrado em " + LocalDate.now(), "Cadastro Efetuado", JOptionPane.INFORMATION_MESSAGE);
         System.out.println(Helper.getInstance().getCandidatura());
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Erro de Cadastro", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_ConcluirCadastroActionPerformed
 
     private void jbtnAddDocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAddDocumentoActionPerformed
@@ -323,6 +332,10 @@ return;
         if (num.indexOf(evt.getKeyChar()) == -1){
         evt.consume(); }
     }//GEN-LAST:event_keyTyped
+
+    private void VagaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VagaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_VagaActionPerformed
 
     /**
      * @param args the command line arguments

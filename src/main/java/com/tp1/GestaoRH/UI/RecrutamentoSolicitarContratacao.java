@@ -4,7 +4,6 @@ import com.tp1.GestaoRH.Candidatura.Candidatura;
 import com.tp1.GestaoRH.dominio.RecrutamentoPersistencia;
 import com.tp1.GestaoRH.dominio.Vaga;
 import com.tp1.GestaoRH.Misc.Helper;
-import com.tp1.GestaoRH.Misc.Helper.HelperPublic;
 import com.tp1.GestaoRH.Misc.Constantes;
 
 import javax.swing.*;
@@ -97,7 +96,7 @@ public class RecrutamentoSolicitarContratacao extends JFrame {
         try {
             ArrayList<Candidatura> candidaturas = new ArrayList<>();
                 if (new File("candidatos.txt").exists()) {
-                    candidaturas = (ArrayList<Candidatura>) Helper.loadObject(Constantes.PATHCANDIDATOS);
+                    candidaturas = (ArrayList<Candidatura>) Helper.getInstance().loadObject(Constantes.PATHCANDIDATOS);
                 }
 
 

@@ -8,11 +8,11 @@ import com.tp1.GestaoRH.Misc.Constantes;
 import com.tp1.GestaoRH.Misc.Helper;
 
 import java.security.InvalidParameterException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -35,9 +35,8 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
         Status.addItem(Constantes.CANDIDATOSTATUS.EM_ANALISE.toString());
         Status.addItem(Constantes.CANDIDATOSTATUS.APROVADO.toString());
         Status.addItem(Constantes.CANDIDATOSTATUS.REJEITADO.toString());
-        for (Candidatura candidatura : candidatos) {
-            Vaga.addItem(candidatura.getVaga().getCargo()); // Resolver duplicatas depois
-        }
+        Helper.getInstance().listarVagas(Vaga);
+        
         
     }
     
@@ -177,6 +176,13 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
             }
         });
 
+        Vaga.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        Vaga.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VagaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -260,7 +266,18 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void PesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PesquisarActionPerformed
-       
+   
+   var filtro = new ArrayList<String>();
+   filtro.add(Nome.getText());
+   filtro.add(cpf.getText());
+   filtro.add(endereco.getText());
+   filtro.add(Vaga.getItemAt(Vaga.getSelectedIndex()));
+    filtro.add(Status.getItemAt(Status.getSelectedIndex()));
+   
+   var sorter = new TableRowSorter<TableModel>(tabelinha.getModel());
+   sorter.setRowFilter(new Sorter(filtro));
+   tabelinha.setRowSorter(sorter); 
+   
     }//GEN-LAST:event_PesquisarActionPerformed
 
     private void Salvar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Salvar1ActionPerformed
@@ -272,8 +289,12 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(rootPane, "Escolha um candidato para exclusão", "Exclusão Negada", JOptionPane.ERROR_MESSAGE);
                         return;
                }
+                candidatos = Helper.getInstance().getCandidatura();
+                if (candidatos.get(tabelinha.getSelectedRow()).getStatus().equals("Em Analise") == false){
+                    JOptionPane.showMessageDialog(rootPane, "Candidato não pode ser excluido, dado que seu Status não está pendente", "Exclusão Negada", JOptionPane.ERROR_MESSAGE);
+                }
                int excluir =  JOptionPane.showConfirmDialog(null,
-             "Deseja mesmo remover o candidato" + tabelinha.getValueAt(tabelinha.getSelectedRow(),0 ) + "?\n Alterações feitas antes da exlusão serão salvas" , "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+             "Deseja mesmo remover o candidato " + tabelinha.getValueAt(tabelinha.getSelectedRow(),0 ) + "?\n Alterações feitas antes da exlusão serão salvas" , "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
              if (excluir == JOptionPane.YES_OPTION){
                 try {
                     salvarValores();
@@ -281,7 +302,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(rootPane, "Erro em salvar, exclusão interrompida", "Ação negada", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                candidatos = Helper.getInstance().getCandidatura();
+               
                 candidatos.remove(tabelinha.getSelectedRow());
                 Helper.getInstance().saveObject(candidatos, Constantes.PATHCANDIDATOS);
                 setUpTable();
@@ -294,6 +315,10 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
         if (num.indexOf(evt.getKeyChar()) == -1){
         evt.consume(); }
     }//GEN-LAST:event_keyTyped
+
+    private void VagaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VagaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_VagaActionPerformed
 
     /**
      * @param args the command line arguments

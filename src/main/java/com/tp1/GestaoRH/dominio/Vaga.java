@@ -1,6 +1,7 @@
 // dominio/Vaga.java
 package com.tp1.GestaoRH.dominio;
 
+import com.tp1.GestaoRH.Candidatura.Candidato;
 import com.tp1.GestaoRH.Misc.Constantes;
 import java.io.Serializable;
 import java.time.LocalDate;
