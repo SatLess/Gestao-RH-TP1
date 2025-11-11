@@ -25,6 +25,7 @@ public class RecrutamentoListarVagas extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         initComponents();
+        SwingUtilities.invokeLater(this::atualizarTabela);
     }
 
     private void initComponents() {

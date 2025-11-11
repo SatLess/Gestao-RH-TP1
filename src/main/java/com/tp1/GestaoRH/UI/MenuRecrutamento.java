@@ -24,6 +24,8 @@ public class MenuRecrutamento extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setResizable(false);
+
     }
 
     /**
@@ -43,10 +45,10 @@ public class MenuRecrutamento extends javax.swing.JFrame {
         Contratação = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        Vagas = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
-        Vagas = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -84,8 +86,8 @@ public class MenuRecrutamento extends javax.swing.JFrame {
                 .addGap(52, 52, 52)
                 .addGroup(CandidaturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(61, Short.MAX_VALUE))
         );
         CandidaturaLayout.setVerticalGroup(
@@ -97,7 +99,7 @@ public class MenuRecrutamento extends javax.swing.JFrame {
                 .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(34, 34, 34)
                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(85, Short.MAX_VALUE))
+                .addContainerGap(93, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Candidatura", new javax.swing.ImageIcon(getClass().getResource("/Images/user-icon.png")), Candidatura); // NOI18N
@@ -115,6 +117,29 @@ public class MenuRecrutamento extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+
+        javax.swing.GroupLayout ContrataçãoLayout = new javax.swing.GroupLayout(Contratação);
+        Contratação.setLayout(ContrataçãoLayout);
+        ContrataçãoLayout.setHorizontalGroup(
+            ContrataçãoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContrataçãoLayout.createSequentialGroup()
+                .addContainerGap(54, Short.MAX_VALUE)
+                .addGroup(ContrataçãoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE))
+                .addGap(61, 61, 61))
+        );
+        ContrataçãoLayout.setVerticalGroup(
+            ContrataçãoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ContrataçãoLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(157, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Gestão", new javax.swing.ImageIcon(getClass().getResource("/Images/Gestao.png")), Contratação); // NOI18N
 
         jButton3.setText("Marcar Entrevista");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -137,54 +162,31 @@ public class MenuRecrutamento extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout ContrataçãoLayout = new javax.swing.GroupLayout(Contratação);
-        Contratação.setLayout(ContrataçãoLayout);
-        ContrataçãoLayout.setHorizontalGroup(
-            ContrataçãoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ContrataçãoLayout.createSequentialGroup()
-                .addGap(67, 67, 67)
-                .addGroup(ContrataçãoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton5)
-                    .addGroup(ContrataçãoLayout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton4))
-                    .addGroup(ContrataçãoLayout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)))
-                .addContainerGap(17, Short.MAX_VALUE))
-        );
-        ContrataçãoLayout.setVerticalGroup(
-            ContrataçãoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ContrataçãoLayout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addGroup(ContrataçãoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(ContrataçãoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton4))
-                .addGap(18, 18, 18)
-                .addComponent(jButton5)
-                .addContainerGap(118, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("tab2", Contratação);
-
         javax.swing.GroupLayout VagasLayout = new javax.swing.GroupLayout(Vagas);
         Vagas.setLayout(VagasLayout);
         VagasLayout.setHorizontalGroup(
             VagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 342, Short.MAX_VALUE)
+            .addGroup(VagasLayout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addGroup(VagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
         VagasLayout.setVerticalGroup(
             VagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 261, Short.MAX_VALUE)
+            .addGroup(VagasLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(95, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("tab3", Vagas);
+        jTabbedPane1.addTab("Recrutamento", new javax.swing.ImageIcon(getClass().getResource("/Images/Recrutamento.png")), Vagas); // NOI18N
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/windows-7-user-icon.png"))); // NOI18N
 
@@ -221,8 +223,7 @@ public class MenuRecrutamento extends javax.swing.JFrame {
                         .addGap(19, 19, 19)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jLabel3))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
