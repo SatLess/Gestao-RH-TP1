@@ -53,6 +53,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
         model.addColumn("Email");
         model.addColumn("Pretensão salarial");
         model.addColumn("Vaga");
+        model.addColumn("Disponibilidade de Horario");
         model.addColumn("Status da candidatura");
         for(Candidatura c: candidatos){
             String[] row = new String[model.getColumnCount()];
@@ -61,8 +62,10 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
             row[2] = c.getCandidato().getEndereço();
             row[3] = c.getCandidato().getEmail();
             row[4] = String.valueOf(c.getCandidato().getPretensaoSalarial());
-            row[5]  = c.getVaga().getCargo();
-            row[6] = c.getStatus();                      
+            row[6]  = c.getVaga().getCargo();
+            String[] horarios = c.getCandidato().getHorarioDisponivel().get(c.getVaga());
+            row[6] = new String(horarios[0] + " - " + horarios[1]);
+            row[7] = c.getStatus();                      
 
             model.addRow(row);
         }
@@ -214,13 +217,13 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
                                     .addComponent(endereco)
                                     .addComponent(Vaga, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 714, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 999, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(55, 55, 55)
                     .addComponent(Salvar1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(738, Short.MAX_VALUE)))
+                    .addContainerGap(1023, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

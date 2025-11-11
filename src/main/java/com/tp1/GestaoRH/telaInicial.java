@@ -17,6 +17,7 @@ public class telaInicial extends javax.swing.JFrame {
      * Creates new form telaInicial
      */
     public telaInicial() {
+        setLocationRelativeTo(null);
         initComponents();
     }
 

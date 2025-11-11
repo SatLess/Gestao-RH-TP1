@@ -56,7 +56,6 @@
                           <Component id="jButton2" max="32767" attributes="0"/>
                           <Component id="jButton1" min="-2" pref="95" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="13" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="49" max="32767" attributes="0"/>

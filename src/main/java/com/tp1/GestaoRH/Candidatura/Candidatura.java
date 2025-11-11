@@ -18,6 +18,10 @@ import javax.swing.JPanel;
  * @author spiri
  */
 public class Candidatura implements Serializable {
+    
+    Candidato candidato;
+    Vaga vaga;
+    Constantes.CANDIDATOSTATUS status;
 
     public Candidatura(Candidato candidato, Vaga vaga) {
         this.candidato = candidato;
@@ -58,8 +62,7 @@ public class Candidatura implements Serializable {
     public void setStatus(Constantes.CANDIDATOSTATUS status) {
         this.status = status;
     }
-
-    
+ 
     public void setStatus(String status) throws InvalidParameterException {
         if (status.toLowerCase().equals("em analise")){
             this.status  = CANDIDATOSTATUS.EM_ANALISE;
@@ -74,8 +77,4 @@ public class Candidatura implements Serializable {
             throw new InaccessibleObjectException("Erro: Status da candidatura inválida");
         }
     }
-
-    Candidato candidato;
-    Vaga vaga;
-    Constantes.CANDIDATOSTATUS status;
 }

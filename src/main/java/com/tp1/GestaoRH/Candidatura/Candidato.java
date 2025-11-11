@@ -18,12 +18,12 @@ import java.io.Serializable;
  */
 public class Candidato extends Pessoa implements Serializable {
 
-    float pretensaoSalarial;
-    HashMap<Vaga, String> horarioDisponivel = new HashMap<Vaga,String>();
-    String experienciaProfissional;
-    ArrayList<File> documentacao = new ArrayList<File>();
+    private float pretensaoSalarial;
+    private HashMap<Vaga, String[]> horarioDisponivel = new HashMap<Vaga,String[]>();
+    private String experienciaProfissional;
+    private ArrayList<File> documentacao = new ArrayList<File>();
     
-    public Candidato(String pretensaoSalarial, Vaga vaga, String horarioDisponivel, String experienciaProfissional, File documentacao, String nome, String email, String endereço, String cpf) {
+    public Candidato(String pretensaoSalarial, Vaga vaga, String[] horarioDisponivel, String experienciaProfissional, File documentacao, String nome, String email, String endereço, String cpf) {
         super(nome, email, endereço, cpf);
         this.pretensaoSalarial = Float.valueOf(pretensaoSalarial);
         this.horarioDisponivel.put(vaga, horarioDisponivel);
@@ -40,12 +40,8 @@ public class Candidato extends Pessoa implements Serializable {
         this.pretensaoSalarial = pretensaoSalarial;
     }
 
-    public HashMap<Vaga, String> getHorarioDisponivel() {
+    public HashMap<Vaga, String[]> getHorarioDisponivel() {
         return horarioDisponivel;
-    }
-
-    public void setHorarioDisponivel(HashMap<Vaga, String> horarioDisponivel) {
-        this.horarioDisponivel = horarioDisponivel; //alterar esse metodo
     }
 
     public String getExperienciaProfissional() {
