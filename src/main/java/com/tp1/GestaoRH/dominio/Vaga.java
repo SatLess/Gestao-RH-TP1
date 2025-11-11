@@ -68,6 +68,18 @@ public class Vaga implements Serializable {
         this.salarioBase = salarioBase;
     }
 
+    public void setCargo(String cargo) {
+        this.cargo = cargo; // 'this.cargo' é o campo da classe
+    }
+
+    public void setDepartamento(String departamento) {
+        this.departamento = departamento; // 'this.departamento' é o campo da classe
+    }
+
+    public void setDataAbertura(LocalDate dataAbertura) {
+        this.dataAbertura = dataAbertura; // 'this.dataAbertura' é o campo da classe
+    }
+
     // Métodos de lógica
     public void adicionarCandidato(Candidato candidato) {
         candidatosAssociados.add(candidato);
