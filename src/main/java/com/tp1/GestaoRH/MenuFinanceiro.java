@@ -47,7 +47,7 @@ public class MenuFinanceiro extends javax.swing.JFrame {
         regrasBotao = new javax.swing.JButton();
         voltarBotao = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Folha de Pagamento");
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
