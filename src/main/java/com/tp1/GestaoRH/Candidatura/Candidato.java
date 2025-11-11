@@ -19,16 +19,15 @@ import java.io.Serializable;
 public class Candidato extends Pessoa implements Serializable {
 
     private float pretensaoSalarial;
-    private HashMap<Vaga, String[]> horarioDisponivel = new HashMap<Vaga,String[]>();
+    private HashMap<Vaga, ArrayList<String>> horarioDisponivel = new HashMap<Vaga,ArrayList<String>>();
     private String experienciaProfissional;
     private ArrayList<File> documentacao = new ArrayList<File>();
     
-    public Candidato(String pretensaoSalarial, Vaga vaga, String[] horarioDisponivel, String experienciaProfissional, File documentacao, String nome, String email, String endereço, String cpf) {
+    public Candidato(String pretensaoSalarial, Vaga vaga, ArrayList<String> horarioDisponivel, String experienciaProfissional, String nome, String email, String endereço, String cpf) {
         super(nome, email, endereço, cpf);
         this.pretensaoSalarial = Float.valueOf(pretensaoSalarial);
         this.horarioDisponivel.put(vaga, horarioDisponivel);
         this.experienciaProfissional = experienciaProfissional;
-        this.documentacao.add(documentacao);
     }
     
     
@@ -40,7 +39,7 @@ public class Candidato extends Pessoa implements Serializable {
         this.pretensaoSalarial = pretensaoSalarial;
     }
 
-    public HashMap<Vaga, String[]> getHorarioDisponivel() {
+    public HashMap<Vaga, ArrayList<String>> getHorarioDisponivel() {
         return horarioDisponivel;
     }
 
@@ -56,8 +55,8 @@ public class Candidato extends Pessoa implements Serializable {
         return documentacao;
     }
 
-    public void setDocumentacao(File documentacao) {
-        this.documentacao.add(documentacao);
+    public void setDocumentacao(ArrayList<File>   documentacao) {
+        this.documentacao = documentacao;
     }
 
     

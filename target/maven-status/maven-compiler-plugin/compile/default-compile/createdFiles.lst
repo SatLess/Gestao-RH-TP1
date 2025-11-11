@@ -1,7 +1,14 @@
 com\tp1\GestaoRH\Candidatura\TelaCadastroCandidato$8.class
+com\tp1\GestaoRH\dominio\RegraInvalidaException.class
+com\tp1\GestaoRH\TelaRegraSalarial$1.class
 com\tp1\GestaoRH\UI\RecrutamentoCadastroVagaTela$1.class
+com\tp1\GestaoRH\Candidatura\TelaCandidatura$5.class
 com\tp1\GestaoRH\Candidatura\TelaCadastroCandidato$7.class
+com\tp1\GestaoRH\dominio\PersistenciaException.class
+com\tp1\GestaoRH\dominio\RepositorioFuncionario.class
+com\tp1\GestaoRH\UI\RecrutamentoListarVagas$2.class
 com\tp1\GestaoRH\dominio\RecrutamentoPersistencia.class
 com\tp1\GestaoRH\Candidatura\Sorter.class
 com\tp1\GestaoRH\Candidatura\TelaBuscaCandidato$6.class
+com\tp1\GestaoRH\TelaRegraSalarial.class
 com\tp1\GestaoRH\Candidatura\Candidatura$1.class

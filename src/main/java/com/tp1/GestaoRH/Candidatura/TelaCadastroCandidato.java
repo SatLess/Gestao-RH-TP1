@@ -6,10 +6,13 @@ package com.tp1.GestaoRH.Candidatura;
 
 import com.tp1.GestaoRH.Misc.Constantes;
 import com.tp1.GestaoRH.Misc.Helper;
+import com.tp1.GestaoRH.dominio.Vaga;
 import javax.swing.JOptionPane;
 import java.time.LocalDate;
 import java.io.*;
 import java.util.ArrayList;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -17,7 +20,7 @@ import java.util.ArrayList;
  */
 public class TelaCadastroCandidato extends javax.swing.JFrame {
     
-    File documentacao;
+    ArrayList<File> documentacao = new ArrayList<File>();
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaCadastroCandidato.class.getName());
 
@@ -330,8 +333,13 @@ JOptionPane.showMessageDialog(rootPane, "Cpf Inválido!", "Erro de Cadastro", JO
 return;
         }
         try {
-        Candidato novoCandidato = new Candidato(Salario.getText(), Helper.getInstance().vagaSelecionada(Vaga.getItemAt(Vaga.getSelectedIndex())), new String[]{Horario.getText(), Horario1.getText()}, Formacao.getText(), this.documentacao, Nome.getText(), Email.getText(), Endereco.getText(), CPF.getText());
-        Candidatura candidatura = new Candidatura(novoCandidato, Helper.getInstance().vagaSelecionada(Vaga.getItemAt(Vaga.getSelectedIndex())));
+        Vaga vaga = Helper.getInstance().vagaSelecionada(Vaga.getItemAt(Vaga.getSelectedIndex()));
+        ArrayList<String> horarios  = new ArrayList<String>();
+        horarios.add(Horario.getText());
+        horarios.add(Horario1.getText());
+        Candidato novoCandidato = new Candidato(Salario.getText(),vaga, horarios, Formacao.getText(), Nome.getText(), Email.getText(), Endereco.getText(), CPF.getText());
+        novoCandidato.setDocumentacao(documentacao);
+        Candidatura candidatura = new Candidatura(novoCandidato, vaga);
         candidatura.setStatus(Constantes.CANDIDATOSTATUS.EM_ANALISE);
         ArrayList<Candidatura> c = Helper.getInstance().getCandidatura();
         c.add(candidatura);
@@ -344,7 +352,28 @@ return;
     }//GEN-LAST:event_ConcluirCadastroActionPerformed
 
     private void jbtnAddDocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAddDocumentoActionPerformed
-        JOptionPane.showMessageDialog(rootPane, "Simulando adição... " + LocalDate.now(), "Adição", JOptionPane.DEFAULT_OPTION);
+                try {
+            JFileChooser file = new JFileChooser();
+            FileNameExtensionFilter F = new FileNameExtensionFilter(null, "pdf");
+            file.setFileFilter(F);
+            file.setCurrentDirectory(new File("."));
+            int approve = file.showOpenDialog(null);
+           
+            
+            if (approve == JFileChooser.APPROVE_OPTION){
+                
+                File f = new File(file.getSelectedFile().getAbsolutePath());
+                documentacao.add(f);
+            
+            }
+            
+            System.out.println(documentacao);
+            
+            
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
     }//GEN-LAST:event_jbtnAddDocumentoActionPerformed
 
     private void CPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CPFActionPerformed

@@ -63,8 +63,9 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
             row[3] = c.getCandidato().getEmail();
             row[4] = String.valueOf(c.getCandidato().getPretensaoSalarial());
             row[6]  = c.getVaga().getCargo();
-            String[] horarios = c.getCandidato().getHorarioDisponivel().get(c.getVaga());
-            row[6] = new String(horarios[0] + " - " + horarios[1]);
+            ArrayList<String> horarios = c.getCandidato().getHorarioDisponivel().get(c.getVaga());
+            System.out.println(horarios);
+            row[6] = new String(horarios.getFirst()+ " - " + horarios.getLast());
             row[7] = c.getStatus();                      
 
             model.addRow(row);
@@ -86,7 +87,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
                 candidatos.get(j).getCandidato().setEmail(table.getValueAt(j,3 ).toString());
                 candidatos.get(j).getCandidato().setPretensaoSalarial(Float.valueOf(table.getValueAt(j,4).toString()));
                 try {
-                    candidatos.get(j).setStatus(table.getValueAt(j, 6).toString()); 
+                    candidatos.get(j).setStatus(table.getValueAt(j, 7).toString()); 
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Ação negada", JOptionPane.ERROR_MESSAGE);
                     throw new InvalidParameterException("");
