@@ -29,6 +29,7 @@ public class RepositorioUsuario {
             lista.add(new Usuario("admin", "123", "Administrador"));
             lista.add(new Usuario("gestor", "123", "GestorRH"));
             lista.add(new Usuario("func", "123", "FuncionarioGeral"));
+            lista.add(new Usuario("rec", "123", "Recrutador"));
             salvar(lista);
         }
     }
