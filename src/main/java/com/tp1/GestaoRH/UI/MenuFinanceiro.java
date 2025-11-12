@@ -4,7 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MenuFinanceiro extends JFrame {
-    private String tipoUsuario;
+    
+    private final String tipoUsuario;
+    
+    private JButton cadastro, regras, gerar, relatorio, beneficios, historico, contracheques, voltar;
+    
     public MenuFinanceiro(String tipoUsuario) {
         super("Menu Financeiro - " + tipoUsuario);
         this.tipoUsuario = tipoUsuario;
@@ -22,14 +26,14 @@ public class MenuFinanceiro extends JFrame {
         JPanel painel = new JPanel(new GridLayout(4,2,12,12));
         painel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
-        JButton cadastro = new JButton("Cadastro de Funcionário");
-        JButton regras = new JButton("Configurar Regras Salariais");
-        JButton gerar = new JButton("Gerar Folha de Pagamento");
-        JButton relatorio = new JButton("Relatório Financeiro");
-        JButton beneficios = new JButton("Benefícios");
-        JButton historico = new JButton("Histórico Financeiro");
-        JButton contracheques = new JButton("Contracheques");
-        JButton voltar = new JButton("Voltar ao Login");
+        cadastro = new JButton("Cadastro de Funcionário");
+        regras = new JButton("Configurar Regras Salariais");
+        gerar = new JButton("Gerar Folha de Pagamento");
+        relatorio = new JButton("Relatório Financeiro");
+        beneficios = new JButton("Benefícios");
+        historico = new JButton("Histórico Financeiro");
+        contracheques = new JButton("Contracheques");
+        voltar = new JButton("Voltar ao Login");
 
         cadastro.addActionListener(e -> new TelaCadastroFuncionario(tipoUsuario).setVisible(true));
         regras.addActionListener(e -> new TelaRegraSalarial(tipoUsuario).setVisible(true));
@@ -50,11 +54,64 @@ public class MenuFinanceiro extends JFrame {
     }
 
     private void aplicarPermissoes() {
-        boolean isAdmin = "Administrador".equalsIgnoreCase(tipoUsuario);
-        boolean isGestor = "GestorRH".equalsIgnoreCase(tipoUsuario);
+        boolean isAdmin = tipoUsuario.equalsIgnoreCase("Administrador");
+        boolean isGestor = tipoUsuario.equalsIgnoreCase("GestorRH");
+        boolean isFuncionario = tipoUsuario.equalsIgnoreCase("FuncionarioGeral");
+        boolean isRecrutador = tipoUsuario.equalsIgnoreCase("Recrutador");
+        
+        if (isAdmin) {
+            // tudo liberado
+            setAllEnabled(true);
+        } 
+        
+        else if (isGestor) {
+            // gestor pode quase tudo, mas não pode mexer em regras salariais
+            setAllEnabled(true);
+            regras.setEnabled(false);
+        } 
+        
+        else if (isFuncionario) {
+            // funcionário só pode ver benefícios, histórico e contracheques
+            cadastro.setEnabled(false);
+            regras.setEnabled(false);
+            gerar.setEnabled(false);
+            relatorio.setEnabled(false);
+            beneficios.setEnabled(true);
+            historico.setEnabled(true);
+            contracheques.setEnabled(true);
+        } 
+        
+        else if (isRecrutador) {
+            // recrutador não tem acesso ao financeiro
+            setAllEnabled(false);
+            JOptionPane.showMessageDialog(this,
+                "Recrutadores não têm acesso ao módulo financeiro.",
+                "Acesso negado", JOptionPane.WARNING_MESSAGE);
+        } 
+        
+        else {
+            // qualquer outro tipo bloqueado
+            setAllEnabled(false);
+            JOptionPane.showMessageDialog(this,
+                "Cargo sem permissões definidas no módulo financeiro.",
+                "Acesso negado", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Método utilitário para habilitar/desabilitar todos os botões
+    
+    private void setAllEnabled(boolean enabled) {
+        cadastro.setEnabled(enabled);
+        regras.setEnabled(enabled);
+        gerar.setEnabled(enabled);
+        relatorio.setEnabled(enabled);
+        beneficios.setEnabled(enabled);
+        historico.setEnabled(enabled);
+        contracheques.setEnabled(enabled);
+    }
+
         // enable/disable buttons based on role
         // find components by iterating or hold references - kept simple by checking when opening screens
-    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new MenuFinanceiro("Administrador").setVisible(true));
