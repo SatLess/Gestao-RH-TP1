@@ -6,6 +6,8 @@ package com.tp1.GestaoRH.Candidatura;
 
 import com.tp1.GestaoRH.Misc.Constantes;
 import com.tp1.GestaoRH.Misc.Helper;
+import java.awt.Desktop;
+import java.io.File;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -123,6 +125,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
         endereco = new javax.swing.JTextField();
         Vaga = new javax.swing.JComboBox<>();
         Status = new javax.swing.JComboBox<>();
+        Pesquisar1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -187,6 +190,13 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
             }
         });
 
+        Pesquisar1.setText("Abrir Documentação");
+        Pesquisar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Pesquisar1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -216,7 +226,8 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
                                     .addComponent(Nome)
                                     .addComponent(cpf)
                                     .addComponent(endereco)
-                                    .addComponent(Vaga, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                    .addComponent(Vaga, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(Pesquisar1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 999, Short.MAX_VALUE)
                 .addContainerGap())
@@ -251,8 +262,10 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(Status, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Pesquisar1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(Exluir, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(67, 67, 67))
@@ -261,7 +274,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(355, Short.MAX_VALUE)
+                    .addContainerGap(359, Short.MAX_VALUE)
                     .addComponent(Salvar1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(11, 11, 11)))
         );
@@ -289,13 +302,15 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
     }//GEN-LAST:event_Salvar1ActionPerformed
 
     private void ExluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExluirActionPerformed
-               if (tabelinha.getSelectedRow() == -1) {
+               int row = tabelinha.getSelectedRow();
+                if (tabelinha.getSelectedRow() == -1) {
                         JOptionPane.showMessageDialog(rootPane, "Escolha um candidato para exclusão", "Exclusão Negada", JOptionPane.ERROR_MESSAGE);
                         return;
                }
                 candidatos = Helper.getInstance().getCandidatura();
                 if (candidatos.get(tabelinha.getSelectedRow()).getStatus().equals("Em Analise") == false){
                     JOptionPane.showMessageDialog(rootPane, "Candidato não pode ser excluido, dado que seu Status não está pendente", "Exclusão Negada", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
                int excluir =  JOptionPane.showConfirmDialog(null,
              "Deseja mesmo remover o candidato " + tabelinha.getValueAt(tabelinha.getSelectedRow(),0 ) + "?\n Alterações feitas antes da exlusão serão salvas" , "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
@@ -307,7 +322,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
                     return;
                 }
                
-                candidatos.remove(tabelinha.getSelectedRow());
+                candidatos.remove(row);
                 Helper.getInstance().saveObject(candidatos, Constantes.PATHCANDIDATOS);
                 setUpTable();
                 
@@ -323,6 +338,25 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
     private void VagaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VagaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_VagaActionPerformed
+
+    private void Pesquisar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Pesquisar1ActionPerformed
+        
+                       if (tabelinha.getSelectedRow() == -1) {
+                        JOptionPane.showMessageDialog(rootPane, "Escolha um candidato para abrir seus documentos", "Pesquisa Negada", JOptionPane.ERROR_MESSAGE);
+                        return;
+               }
+        
+        var candidato = Helper.getInstance().getCandidatura().get(tabelinha.getSelectedRow());
+        if (candidato.getCandidato().getDocumentacao().isEmpty()){
+         JOptionPane.showMessageDialog(rootPane, "Candidato nao anexou nenhum arquivo.", "Pesquisa Negada", JOptionPane.ERROR_MESSAGE);
+        }
+        Desktop desktop = Desktop.getDesktop();
+        for (File f : candidato.getCandidato().getDocumentacao()) {
+            try {desktop.open(f);}
+            catch (Exception e){JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Pesquisa Negada", JOptionPane.ERROR_MESSAGE);}
+        }
+         
+    }//GEN-LAST:event_Pesquisar1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -353,6 +387,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
     private javax.swing.JButton Exluir;
     private javax.swing.JTextField Nome;
     private javax.swing.JButton Pesquisar;
+    private javax.swing.JButton Pesquisar1;
     private javax.swing.JButton Salvar1;
     private javax.swing.JComboBox<String> Status;
     private javax.swing.JComboBox<String> Vaga;

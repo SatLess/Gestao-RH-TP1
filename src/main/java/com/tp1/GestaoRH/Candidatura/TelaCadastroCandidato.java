@@ -292,7 +292,8 @@ public class TelaCadastroCandidato extends javax.swing.JFrame {
     }//GEN-LAST:event_NomeActionPerformed
 
     private boolean validarCPF(){
-        String s =CPF.getText();
+        String s =CPF.getText().replace(".", "");
+        s = s.replace("-", "");
         int primeiro = 0;
         int segundo = 0;
         int peso = 10;
@@ -332,6 +333,16 @@ public class TelaCadastroCandidato extends javax.swing.JFrame {
 JOptionPane.showMessageDialog(rootPane, "Cpf Inválido!", "Erro de Cadastro", JOptionPane.ERROR_MESSAGE);
 return;
         }
+        
+        for(Candidatura c : Helper.getInstance().getCandidatura()){
+        
+            if (c.getCandidato().getCpf().replace(".","").replace("-", "").equals(CPF.getText().replace(".","").replace("-", ""))){
+                JOptionPane.showMessageDialog(rootPane, "Candidato já cadastrado!", "Erro de Cadastro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        
+        }
+        
         try {
         Vaga vaga = Helper.getInstance().vagaSelecionada(Vaga.getItemAt(Vaga.getSelectedIndex()));
         ArrayList<String> horarios  = new ArrayList<String>();

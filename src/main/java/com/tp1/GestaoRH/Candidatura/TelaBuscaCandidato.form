@@ -54,6 +54,7 @@
                                   <Component id="Vaga" max="32767" attributes="0"/>
                               </Group>
                           </Group>
+                          <Component id="Pesquisar1" min="-2" pref="201" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -100,8 +101,10 @@
                   <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="Status" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="52" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Component id="Pesquisar" min="-2" pref="44" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="Pesquisar1" min="-2" pref="44" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="Exluir" min="-2" pref="44" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="67" max="-2" attributes="0"/>
@@ -112,7 +115,7 @@
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="355" max="32767" attributes="0"/>
+                  <EmptySpace pref="359" max="32767" attributes="0"/>
                   <Component id="Salvar1" min="-2" pref="44" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
               </Group>
@@ -224,6 +227,14 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
+    </Component>
+    <Component class="javax.swing.JButton" name="Pesquisar1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Abrir Documenta&#xe7;&#xe3;o"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Pesquisar1ActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
