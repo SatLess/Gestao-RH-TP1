@@ -1,51 +1,55 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.tp1.GestaoRH.dominio;
+
 import java.io.Serializable;
-/**
- *
- * @author matheusmerechia
- */
+import java.time.LocalDate;
+
 public class FolhaPagamento implements Serializable {
     private static final long serialVersionUID = 1L;
-
     private Funcionario funcionario;
-    private RegraSalario regra;
-    private double salarioFinal;
+    private double salarioBruto;
+    private double deducoes;
+    private double salarioLiquido;
+    private LocalDate data;
 
-    public FolhaPagamento(Funcionario funcionario, RegraSalario regra) {
-        if (funcionario == null) throw new IllegalArgumentException("funcionario nulo");
-        if (regra == null) throw new IllegalArgumentException("regra nula");
-        this.funcionario = funcionario;
-        this.regra = regra;
-        calcularSalario();
+    public FolhaPagamento(Funcionario f, RegraSalario regra) {
+        this.funcionario = f;
+        this.data = LocalDate.now();
+        calcular(f, regra);
     }
 
-    public void calcularSalario() {
-        double base = funcionario.getSalarioBase();
-        this.salarioFinal = regra.aplicarRegras(base, funcionario.getTipoContratacao());
+    private void calcular(Funcionario f, RegraSalario regra) {
+        double base = f.getSalarioBase();
+        switch (f.getTipoContratacao()) {
+            case "CLT":
+                salarioBruto = base + regra.getValeAlimentacao() + regra.getValeTransporte();
+                deducoes = base * regra.getImposto();
+                salarioLiquido = salarioBruto - deducoes;
+                break;
+            case "Estágio": case "Estagio":
+                salarioBruto = base + regra.getValeTransporte();
+                deducoes = 0.0;
+                salarioLiquido = salarioBruto;
+                break;
+            case "PJ":
+                salarioBruto = base;
+                deducoes = 0.0;
+                salarioLiquido = salarioBruto;
+                break;
+            default:
+                salarioBruto = base; deducoes = 0.0; salarioLiquido = salarioBruto; break;
+        }
     }
-
-    public double getSalarioFinal() { return salarioFinal; }
 
     public Funcionario getFuncionario() { return funcionario; }
-    public void setFuncionario(Funcionario funcionario) {
-        if (funcionario == null) throw new IllegalArgumentException("funcionario nulo");
-        this.funcionario = funcionario;
-        calcularSalario();
-    }
-
-    public RegraSalario getRegra() { return regra; }
-    public void setRegra(RegraSalario regra) {
-        if (regra == null) throw new IllegalArgumentException("regra nula");
-        this.regra = regra;
-        calcularSalario();
-    }
+    public double getSalarioBruto() { return salarioBruto; }
+    public double getDeducoes() { return deducoes; }
+    public double getSalarioLiquido() { return salarioLiquido; }
+    public LocalDate getData() { return data; }
 
     @Override
     public String toString() {
-        return String.format("Folha[funcionario=%s, salarioFinal=%.2f]", funcionario.getNome(), salarioFinal);
+        return String.format("Contracheque\nNome: %s\nCargo: %s\nRegime: %s\nBruto: R$ %.2f\nDeduções: R$ %.2f\nLíquido: R$ %.2f\nData: %s",
+                funcionario.getNome(), funcionario.getCargo(), funcionario.getTipoContratacao(),
+                salarioBruto, deducoes, salarioLiquido, data.toString());
     }
 }
