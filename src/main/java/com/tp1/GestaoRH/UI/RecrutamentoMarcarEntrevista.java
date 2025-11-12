@@ -1,21 +1,83 @@
 package com.tp1.GestaoRH.UI;
 
+// Imports necessários para conectar ao seu sistema
+import com.tp1.GestaoRH.Candidatura.Candidatura;
+import com.tp1.GestaoRH.Candidatura.Candidato; // Importação correta
+import com.tp1.GestaoRH.Misc.Helper;
+import com.tp1.GestaoRH.Misc.Constantes; 
+
+// ===================================================================
+// CORREÇÃO 1: A classe Vaga está no pacote 'dominio'
+// ===================================================================
+import com.tp1.GestaoRH.dominio.Vaga; 
+
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RecrutamentoMarcarEntrevista extends JFrame {
-    private JTextField txtCandidato, txtVaga, txtAvaliador, txtNota;
+
+    private JComboBox<String> cmbCandidato;
+    private JTextField txtVagaAssociada;
     private JFormattedTextField txtData;
+    private JTextField txtAvaliador, txtNota;
     private JButton btnSalvar;
+
+    private Map<String, String> dadosCandidatosVaga;
 
     public RecrutamentoMarcarEntrevista() {
         setTitle("Marcar Entrevista - Recrutamento");
-        setSize(400, 350);
+        setSize(450, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        carregarDadosReais();
         initComponents();
+        atualizarVagaSelecionada();
+    }
+
+    private void carregarDadosReais() {
+        this.dadosCandidatosVaga = new HashMap<>();
+        
+        ArrayList<Candidatura> listaDeCandidaturas = Helper.getInstance().getCandidatura();
+
+        if (listaDeCandidaturas == null || listaDeCandidaturas.isEmpty()) {
+            System.err.println("Nenhuma candidatura encontrada em " + Constantes.PATHCANDIDATOS);
+            return;
+        }
+
+        for (Candidatura candidatura : listaDeCandidaturas) {
+            
+            // ===================================================================
+            // CORREÇÃO 2: Comparamos a String "Em Analise" (conforme Candidatura.java)
+            // ===================================================================
+            if ("Em Analise".equals(candidatura.getStatus())) {
+                
+                try {
+                    String nomeCandidato = candidatura.getCandidato().getNome();
+                    
+                    // ===================================================================
+                    // CORREÇÃO 3: Usamos .getCargo() (conforme Vaga.java)
+                    // ===================================================================
+                    String nomeVaga = candidatura.getVaga().getCargo(); 
+
+                    // Cria uma chave única para o JComboBox
+                    String chaveUnica = nomeCandidato + " (" + nomeVaga + ")";
+                    
+                    this.dadosCandidatosVaga.put(chaveUnica, nomeVaga);
+
+                } catch (NullPointerException e) {
+                    // Captura erros se getCandidato() ou getVaga() forem nulos
+                    System.err.println("Erro ao processar candidatura: Candidato ou Vaga nulos. " + e.getMessage());
+                } catch (Exception e) {
+                    // Captura outros erros inesperados
+                    System.err.println("Erro inesperado ao processar candidatura: " + e.getMessage());
+                }
+            }
+        }
     }
 
     private void initComponents() {
@@ -28,22 +90,22 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
 
         int linha = 0;
 
-        // Candidato
         gbc.gridx = 0; gbc.gridy = linha;
-        panel.add(new JLabel("Candidato:"), gbc);
+        panel.add(new JLabel("Candidato / Vaga:"), gbc);
         gbc.gridx = 1;
-        txtCandidato = new JTextField(20);
-        panel.add(txtCandidato, gbc);
+        cmbCandidato = new JComboBox<>(dadosCandidatosVaga.keySet().toArray(new String[0]));
+        panel.add(cmbCandidato, gbc);
 
-        // Vaga
         linha++;
         gbc.gridx = 0; gbc.gridy = linha;
-        panel.add(new JLabel("Vaga:"), gbc);
+        panel.add(new JLabel("Vaga Associada:"), gbc);
         gbc.gridx = 1;
-        txtVaga = new JTextField(20);
-        panel.add(txtVaga, gbc);
+        txtVagaAssociada = new JTextField(20);
+        txtVagaAssociada.setEditable(false);
+        txtVagaAssociada.setFont(txtVagaAssociada.getFont().deriveFont(Font.ITALIC | Font.BOLD));
+        txtVagaAssociada.setBackground(Color.LIGHT_GRAY);
+        panel.add(txtVagaAssociada, gbc);
 
-        // Data
         linha++;
         gbc.gridx = 0; gbc.gridy = linha;
         panel.add(new JLabel("Data (dd/MM/yyyy):"), gbc);
@@ -57,7 +119,6 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
         }
         panel.add(txtData, gbc);
 
-        // Avaliador
         linha++;
         gbc.gridx = 0; gbc.gridy = linha;
         panel.add(new JLabel("Avaliador:"), gbc);
@@ -65,7 +126,6 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
         txtAvaliador = new JTextField(20);
         panel.add(txtAvaliador, gbc);
 
-        // Nota
         linha++;
         gbc.gridx = 0; gbc.gridy = linha;
         panel.add(new JLabel("Nota:"), gbc);
@@ -73,19 +133,30 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
         txtNota = new JTextField(20);
         panel.add(txtNota, gbc);
 
-        // Botão Salvar
+        cmbCandidato.addActionListener(e -> atualizarVagaSelecionada());
+
         linha++;
         gbc.gridx = 0; gbc.gridy = linha; gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        btnSalvar = new JButton("Salvar");
+        gbc.fill = GridBagConstraints.NONE; 
+        btnSalvar = new JButton("Salvar Agendamento");
         panel.add(btnSalvar, gbc);
 
         getContentPane().setLayout(new GridBagLayout());
         GridBagConstraints center = new GridBagConstraints();
         center.gridx = 0;
         center.gridy = 0;
-        center.anchor = GridBagConstraints.CENTER;
+        center.anchor = GridBagConstraints.NORTH;
+        center.insets = new Insets(10, 10, 10, 10);
         getContentPane().add(panel, center);
+    }
+
+    private void atualizarVagaSelecionada() {
+        String chaveSelecionada = (String) cmbCandidato.getSelectedItem();
+        if (chaveSelecionada != null) {
+            String vaga = dadosCandidatosVaga.get(chaveSelecionada);
+            txtVagaAssociada.setText(vaga != null ? vaga : "Vaga não encontrada");
+        }
     }
 
     public static void main(String[] args) {
