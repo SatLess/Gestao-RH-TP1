@@ -49,6 +49,7 @@ public class MenuRecrutamento extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -139,7 +140,7 @@ public class MenuRecrutamento extends javax.swing.JFrame {
                 .addContainerGap(157, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Gestão", new javax.swing.ImageIcon(getClass().getResource("/Images/Gestao.png")), Contratação); // NOI18N
+        jTabbedPane1.addTab("Gestão", Contratação);
 
         jButton3.setText("Marcar Entrevista");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -162,16 +163,28 @@ public class MenuRecrutamento extends javax.swing.JFrame {
             }
         });
 
+        jButton9.setText("Avaliar Entrevistado");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout VagasLayout = new javax.swing.GroupLayout(Vagas);
         Vagas.setLayout(VagasLayout);
         VagasLayout.setHorizontalGroup(
             VagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(VagasLayout.createSequentialGroup()
-                .addGap(53, 53, 53)
                 .addGroup(VagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(VagasLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, VagasLayout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addGroup(VagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(62, Short.MAX_VALUE))
         );
         VagasLayout.setVerticalGroup(
@@ -183,10 +196,12 @@ public class MenuRecrutamento extends javax.swing.JFrame {
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(34, 34, 34)
                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(95, Short.MAX_VALUE))
+                .addGap(34, 34, 34)
+                .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Recrutamento", new javax.swing.ImageIcon(getClass().getResource("/Images/Recrutamento.png")), Vagas); // NOI18N
+        jTabbedPane1.addTab("Recrutamento", Vagas);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/windows-7-user-icon.png"))); // NOI18N
 
@@ -264,6 +279,10 @@ public class MenuRecrutamento extends javax.swing.JFrame {
         new TelaCandidatura().setVisible(true);
     }//GEN-LAST:event_jButton8ActionPerformed
 
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        new RecrutamentoAvaliarCandidato().setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton9ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -311,6 +330,7 @@ public class MenuRecrutamento extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
