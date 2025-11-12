@@ -1,19 +1,21 @@
 package com.tp1.GestaoRH.UI;
 
-// Imports necessários para conectar ao seu sistema
 import com.tp1.GestaoRH.Candidatura.Candidatura;
-import com.tp1.GestaoRH.Candidatura.Candidato; // Importação correta
+import com.tp1.GestaoRH.Candidatura.Candidato;
+import com.tp1.GestaoRH.dominio.Entrevista; 
+// Não precisamos mais do 'Recrutador', pois não validamos
 import com.tp1.GestaoRH.Misc.Helper;
 import com.tp1.GestaoRH.Misc.Constantes; 
-
-// ===================================================================
-// CORREÇÃO 1: A classe Vaga está no pacote 'dominio'
-// ===================================================================
 import com.tp1.GestaoRH.dominio.Vaga; 
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.time.LocalDate; 
+import java.time.format.DateTimeFormatter; 
+import java.time.format.DateTimeParseException; 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,10 +25,11 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
     private JComboBox<String> cmbCandidato;
     private JTextField txtVagaAssociada;
     private JFormattedTextField txtData;
-    private JTextField txtAvaliador, txtNota;
+    private JTextField txtNota;
     private JButton btnSalvar;
+    private JTextField txtAvaliador; 
 
-    private Map<String, String> dadosCandidatosVaga;
+    private Map<String, Candidatura> dadosCandidaturas;
 
     public RecrutamentoMarcarEntrevista() {
         setTitle("Marcar Entrevista - Recrutamento");
@@ -40,47 +43,28 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
     }
 
     private void carregarDadosReais() {
-        this.dadosCandidatosVaga = new HashMap<>();
-        
+        this.dadosCandidaturas = new HashMap<>();
         ArrayList<Candidatura> listaDeCandidaturas = Helper.getInstance().getCandidatura();
 
-        if (listaDeCandidaturas == null || listaDeCandidaturas.isEmpty()) {
-            System.err.println("Nenhuma candidatura encontrada em " + Constantes.PATHCANDIDATOS);
-            return;
-        }
+        if (listaDeCandidaturas == null) return;
 
         for (Candidatura candidatura : listaDeCandidaturas) {
-            
-            // ===================================================================
-            // CORREÇÃO 2: Comparamos a String "Em Analise" (conforme Candidatura.java)
-            // ===================================================================
             if ("Em Analise".equals(candidatura.getStatus())) {
-                
                 try {
                     String nomeCandidato = candidatura.getCandidato().getNome();
-                    
-                    // ===================================================================
-                    // CORREÇÃO 3: Usamos .getCargo() (conforme Vaga.java)
-                    // ===================================================================
                     String nomeVaga = candidatura.getVaga().getCargo(); 
-
-                    // Cria uma chave única para o JComboBox
                     String chaveUnica = nomeCandidato + " (" + nomeVaga + ")";
-                    
-                    this.dadosCandidatosVaga.put(chaveUnica, nomeVaga);
-
-                } catch (NullPointerException e) {
-                    // Captura erros se getCandidato() ou getVaga() forem nulos
-                    System.err.println("Erro ao processar candidatura: Candidato ou Vaga nulos. " + e.getMessage());
+                    this.dadosCandidaturas.put(chaveUnica, candidatura);
                 } catch (Exception e) {
-                    // Captura outros erros inesperados
-                    System.err.println("Erro inesperado ao processar candidatura: " + e.getMessage());
+                    System.err.println("Erro ao processar candidatura: " + e.getMessage());
                 }
             }
         }
     }
 
     private void initComponents() {
+        // ... (O código de initComponents permanece o mesmo da versão anterior) ...
+        // ... (Garantindo que 'txtAvaliador' é um JTextField) ...
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
@@ -90,12 +74,14 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
 
         int linha = 0;
 
+        // Candidato (Linha 0)
         gbc.gridx = 0; gbc.gridy = linha;
         panel.add(new JLabel("Candidato / Vaga:"), gbc);
         gbc.gridx = 1;
-        cmbCandidato = new JComboBox<>(dadosCandidatosVaga.keySet().toArray(new String[0]));
+        cmbCandidato = new JComboBox<>(dadosCandidaturas.keySet().toArray(new String[0]));
         panel.add(cmbCandidato, gbc);
 
+        // Vaga Associada (Linha 1)
         linha++;
         gbc.gridx = 0; gbc.gridy = linha;
         panel.add(new JLabel("Vaga Associada:"), gbc);
@@ -106,6 +92,7 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
         txtVagaAssociada.setBackground(Color.LIGHT_GRAY);
         panel.add(txtVagaAssociada, gbc);
 
+        // Data (Linha 2)
         linha++;
         gbc.gridx = 0; gbc.gridy = linha;
         panel.add(new JLabel("Data (dd/MM/yyyy):"), gbc);
@@ -119,13 +106,15 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
         }
         panel.add(txtData, gbc);
 
+        // Avaliador (Linha 3) - JTextField
         linha++;
         gbc.gridx = 0; gbc.gridy = linha;
         panel.add(new JLabel("Avaliador:"), gbc);
         gbc.gridx = 1;
-        txtAvaliador = new JTextField(20);
+        txtAvaliador = new JTextField(20); 
         panel.add(txtAvaliador, gbc);
 
+        // Nota (Linha 4)
         linha++;
         gbc.gridx = 0; gbc.gridy = linha;
         panel.add(new JLabel("Nota:"), gbc);
@@ -135,11 +124,14 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
 
         cmbCandidato.addActionListener(e -> atualizarVagaSelecionada());
 
+        // Botão Salvar (Linha 5)
         linha++;
         gbc.gridx = 0; gbc.gridy = linha; gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.NONE; 
         btnSalvar = new JButton("Salvar Agendamento");
+        
+        btnSalvar.addActionListener(e -> salvarAgendamento()); 
         panel.add(btnSalvar, gbc);
 
         getContentPane().setLayout(new GridBagLayout());
@@ -154,8 +146,76 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
     private void atualizarVagaSelecionada() {
         String chaveSelecionada = (String) cmbCandidato.getSelectedItem();
         if (chaveSelecionada != null) {
-            String vaga = dadosCandidatosVaga.get(chaveSelecionada);
-            txtVagaAssociada.setText(vaga != null ? vaga : "Vaga não encontrada");
+            Candidatura cand = dadosCandidaturas.get(chaveSelecionada);
+            if (cand != null) {
+                txtVagaAssociada.setText(cand.getVaga().getCargo());
+            } else {
+                txtVagaAssociada.setText("Vaga não encontrada");
+            }
+        }
+    }
+    
+
+    private void salvarAgendamento() {
+        
+        try {
+          
+            String nomeAvaliador = txtAvaliador.getText().trim();
+            if (nomeAvaliador.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor, digite o nome do Avaliador.", "Campos Obrigatórios", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            
+            String dataStr = txtData.getText();
+            if (dataStr.trim().equals("/  /")) {
+                JOptionPane.showMessageDialog(this, "Por favor, preencha a Data.", "Campos Obrigatórios", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate dataParseada = LocalDate.parse(dataStr, formatter);
+            
+            String notaStr = txtNota.getText().trim();
+            double notaParseada = 0.0; 
+            if (!notaStr.isEmpty()) {
+                notaParseada = Double.parseDouble(notaStr.replace(",", "."));
+            }
+
+            // --- Obtenção dos Objetos-Chave ---
+            String chaveCandidatura = (String) cmbCandidato.getSelectedItem();
+            if (chaveCandidatura == null) {
+                JOptionPane.showMessageDialog(this, "Nenhum candidato selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            Candidatura candidaturaAlvo = dadosCandidaturas.get(chaveCandidatura);
+            
+            // Criar o objeto Entrevista (Passando a String 'nomeAvaliador')
+            Entrevista novaEntrevista = new Entrevista(
+                candidaturaAlvo.getVaga(), 
+                candidaturaAlvo.getCandidato(), 
+                dataParseada, 
+                nomeAvaliador, // Passamos a String diretamente
+                notaParseada
+            );
+
+            // --- Persistência ---
+            ArrayList<Entrevista> listaEntrevistas = Helper.getInstance().getEntrevistas();
+            listaEntrevistas.add(novaEntrevista);
+            Helper.getInstance().saveObject(listaEntrevistas, Constantes.PATH_ENTREVISTAS);
+            
+            // Notificar o usuário
+            JOptionPane.showMessageDialog(this, 
+                "Entrevista para " + candidaturaAlvo.getCandidato().getNome() + " agendada com sucesso!", 
+                "Agendamento Efetuado", 
+                JOptionPane.INFORMATION_MESSAGE);
+                
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(this, "Formato de Data inválido. Use dd/MM/yyyy.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Formato de Nota inválido. Use um número (ex: 8.5).", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ocorreu um erro inesperado ao salvar: " + e.getMessage(), "Erro de Sistema", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
 

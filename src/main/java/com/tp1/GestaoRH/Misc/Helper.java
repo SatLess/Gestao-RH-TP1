@@ -5,6 +5,8 @@
 package com.tp1.GestaoRH.Misc;
 import com.tp1.GestaoRH.Candidatura.Candidatura;
 import com.tp1.GestaoRH.Misc.Constantes.STATUS;
+import com.tp1.GestaoRH.dominio.Entrevista;
+import com.tp1.GestaoRH.dominio.Recrutador;
 import com.tp1.GestaoRH.dominio.RecrutamentoPersistencia;
 
 import java.io.FileInputStream;
@@ -13,7 +15,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.time.LocalDate;
-
+import com.tp1.GestaoRH.dominio.Contratacao;
 import com.tp1.GestaoRH.dominio.Vaga;
 import java.io.File;
 import java.util.ArrayList;
@@ -27,6 +29,44 @@ public class Helper {
 
     private static Helper instance;
     private ArrayList<Candidatura> candidaturas = new ArrayList<Candidatura>();
+
+    public ArrayList<Contratacao> getContratacoes() {
+        ArrayList<Contratacao> contratacoes = (ArrayList<Contratacao>) this.loadObject(Constantes.PATH_CONTRATACOES);
+        if (contratacoes == null) {
+            return new ArrayList<>(); // Retorna lista vazia
+        }
+        return contratacoes;
+    }
+
+    // Novo método para carregar a lista de recrutadores
+    public ArrayList<Recrutador> getRecrutadores() {
+        // Assumindo que o Admin salva os recrutadores em PATH_RECRUTADORES
+        ArrayList<Recrutador> recrutadores = (ArrayList<Recrutador>) this.loadObject(Constantes.PATH_RECRUTADORES);
+        if (recrutadores == null) {
+            return new ArrayList<>(); // Retorna lista vazia
+        }
+        return recrutadores;
+    }
+
+    // Novo método para carregar a lista de entrevistas (igual ao getCandidatura)
+    public ArrayList<Entrevista> getEntrevistas() {
+        ArrayList<Entrevista> entrevistas = (ArrayList<Entrevista>) this.loadObject(Constantes.PATH_ENTREVISTAS);
+        if (entrevistas == null) {
+            return new ArrayList<>(); // Retorna lista vazia
+        }
+        return entrevistas;
+    }
+
+    // Novo método de busca: "Me dê o objeto Recrutador com este nome"
+    public Recrutador getRecrutadorPorNome(String nome) {
+        ArrayList<Recrutador> recrutadores = getRecrutadores();
+        for (Recrutador r : recrutadores) {
+            if (r.getNome().equalsIgnoreCase(nome)) {
+                return r;
+            }
+        }
+        return null; // Não encontrado
+    }
 
     public ArrayList<Candidatura> getCandidatura() {
         if (new File("candidatos.txt").exists() == true){

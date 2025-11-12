@@ -40,7 +40,7 @@ public class RecrutamentoListarVagas extends JFrame {
         model = new DefaultTableModel(colNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // tabela somente leitura
+                return false; 
             }
         };
 
@@ -54,7 +54,6 @@ public class RecrutamentoListarVagas extends JFrame {
         btnEditar = new JButton("Editar");
         btnExcluir = new JButton("Excluir");
 
-        // Ações dos botões
         btnAtualizar.addActionListener(e -> atualizarTabela());
         btnVoltar.addActionListener(e -> dispose());
         btnEditar.addActionListener(e -> editarVaga());
@@ -85,12 +84,12 @@ public class RecrutamentoListarVagas extends JFrame {
                 if (v.getDataAbertura() != null) data = v.getDataAbertura().format(dtf);
             } catch (Exception ignored) { }
             model.addRow(new Object[]{
-                    v.getId(),
-                    v.getCargo(),
-                    formatadorMoeda.format(v.getSalarioBase()),
-                    v.getDepartamento(),
-                    v.getStatus(),
-                    data
+                v.getId(),
+                v.getCargo(),
+                formatadorMoeda.format(v.getSalarioBase()),
+                v.getDepartamento(),
+                v.getStatus(),
+                data
             });
         }
     }
@@ -102,12 +101,12 @@ public class RecrutamentoListarVagas extends JFrame {
             if (v.getDataAbertura() != null) data = v.getDataAbertura().format(dtf);
         } catch (Exception ignored) { }
         model.addRow(new Object[]{
-                v.getId(),
-                v.getCargo(),
-                formatadorMoeda.format(v.getSalarioBase()),
-                v.getDepartamento(),
-                v.getStatus(),
-                data
+            v.getId(),
+            v.getCargo(),
+            formatadorMoeda.format(v.getSalarioBase()),
+            v.getDepartamento(),
+            v.getStatus(),
+            data
         });
     }
 
@@ -119,14 +118,14 @@ public class RecrutamentoListarVagas extends JFrame {
         try {
             List<Vaga> vagas = RecrutamentoPersistencia.carregarVagas();
             setVagas(vagas);
+            
+            // Removido o JOptionPane de sucesso para não interromper o fluxo
+            System.out.println("Lista de vagas atualizada com sucesso! Total: " + vagas.size());
 
-            JOptionPane.showMessageDialog(this,
-                    "✅ Lista de vagas atualizada com sucesso!\nTotal de vagas: " + vagas.size(),
-                    "Atualizar", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
-                    "❌ Erro ao carregar vagas: " + e.getMessage(),
-                    "Erro", JOptionPane.ERROR_MESSAGE);
+                "❌ Erro ao carregar vagas: " + e.getMessage(),
+                "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -135,8 +134,8 @@ public class RecrutamentoListarVagas extends JFrame {
 
         if (selecionadas.length != 1) {
             JOptionPane.showMessageDialog(this,
-                    "Selecione apenas uma vaga para editar.",
-                    "Aviso", JOptionPane.WARNING_MESSAGE);
+                "Selecione apenas uma vaga para editar.",
+                "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -147,7 +146,6 @@ public class RecrutamentoListarVagas extends JFrame {
         String depto = model.getValueAt(linha, 3).toString();
         Constantes.STATUS statusAtual = (Constantes.STATUS) model.getValueAt(linha, 4);
 
-        // Painel de edição embutido (JDialog)
         JDialog dialog = new JDialog(this, "Editar Vaga", true);
         dialog.setSize(400, 300);
         dialog.setLocationRelativeTo(this);
@@ -155,7 +153,6 @@ public class RecrutamentoListarVagas extends JFrame {
 
         JTextField txtCargo = new JTextField(cargo);
         JTextField txtSalario = new JTextField(salario);
-
 
         txtSalario.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
@@ -174,12 +171,23 @@ public class RecrutamentoListarVagas extends JFrame {
             }
         });
 
-
-
-
         JTextField txtDepto = new JTextField(depto);
-        JComboBox<Constantes.STATUS> cmbStatus = new JComboBox<>(Constantes.STATUS.values());
+
+        // ===================================================================
+        // AQUI ESTÁ A CORREÇÃO CRÍTICA
+        // ===================================================================
+        // Assumindo que seu Enum 'STATUS' contém ABERTA e FECHADA
+        // Se os nomes forem outros (ex: ATIVA, INATIVA), ajuste aqui.
+        Constantes.STATUS[] statusDeVaga = {
+            Constantes.STATUS.ABERTA, 
+            Constantes.STATUS.FECHADA 
+        };
+        JComboBox<Constantes.STATUS> cmbStatus = new JComboBox<>(statusDeVaga);
         cmbStatus.setSelectedItem(statusAtual);
+        
+        // Se o status atual for 'APROVADO' (um status inválido), 
+        // ele não será selecionado, forçando o usuário a escolher um válido.
+        // ===================================================================
 
         JButton btnSalvar = new JButton("Salvar");
         JButton btnCancelar = new JButton("Cancelar");
@@ -215,13 +223,15 @@ public class RecrutamentoListarVagas extends JFrame {
                         v.setDepartamento(txtDepto.getText());
 
                         Constantes.STATUS novoStatus = (Constantes.STATUS) cmbStatus.getSelectedItem();
-                    v.setStatus(novoStatus);
+                        v.setStatus(novoStatus);
                         break;
                     }
                 }
                 RecrutamentoPersistencia.salvarVagas(vagas);
                 
-                atualizarTabela();
+                // Chamamos a atualização de tabela local
+                setVagas(vagas); // Atualiza a tabela na tela
+                
                 dialog.dispose();
                 JOptionPane.showMessageDialog(this, "✅ Vaga atualizada com sucesso!");
                 
@@ -235,7 +245,6 @@ public class RecrutamentoListarVagas extends JFrame {
             }
         });
 
-
         btnCancelar.addActionListener(e -> dialog.dispose());
         dialog.setVisible(true);
     }
@@ -245,15 +254,15 @@ public class RecrutamentoListarVagas extends JFrame {
 
         if (selecionadas.length == 0) {
             JOptionPane.showMessageDialog(this,
-                    "Selecione uma ou mais vagas para excluir.",
-                    "Aviso", JOptionPane.WARNING_MESSAGE);
+                "Selecione uma ou mais vagas para excluir.",
+                "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         int confirm = JOptionPane.showConfirmDialog(this,
-                "Deseja realmente excluir as vagas selecionadas?",
-                "Confirmar Exclusão",
-                JOptionPane.YES_NO_OPTION);
+            "Deseja realmente excluir as vagas selecionadas?",
+            "Confirmar Exclusão",
+            JOptionPane.YES_NO_OPTION);
 
         if (confirm != JOptionPane.YES_OPTION) return;
 
@@ -268,12 +277,14 @@ public class RecrutamentoListarVagas extends JFrame {
             vagas.removeIf(v -> idsParaExcluir.contains(v.getId()));
             RecrutamentoPersistencia.salvarVagas(vagas);
 
-            atualizarTabela();
+            // Atualiza a tabela local
+            setVagas(vagas);
+            
             JOptionPane.showMessageDialog(this, "✅ Vagas excluídas com sucesso!");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
-                    "❌ Erro ao excluir: " + e.getMessage(),
-                    "Erro", JOptionPane.ERROR_MESSAGE);
+                "❌ Erro ao excluir: " + e.getMessage(),
+                "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 

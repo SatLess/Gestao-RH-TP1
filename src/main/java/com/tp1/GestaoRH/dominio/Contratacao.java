@@ -1,36 +1,57 @@
-// dominio/Contratacao.java
 package com.tp1.GestaoRH.dominio;
 
+import com.tp1.GestaoRH.Candidatura.Candidatura;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Contratacao {
-    private String candidato;
-    private Vaga vaga;
-    private String regime; // CLT, PJ, Estágio, etc.
+// 1. Deve ser Serializable para o Helper salvar
+public class Contratacao implements Serializable {
+
+    // 2. Armazena a CANDIDATURA inteira (o link "Quem-Para-Qual-Vaga")
+    private Candidatura candidaturaAprovada;
+    
+    // 3. Os dados do Requisito 2
+    private String regime; // "CLT", "Estágio", "PJ"
     private LocalDate dataContratacao;
 
-    public Contratacao(String candidato, Vaga vaga, String regime, LocalDate dataContratacao) {
-        this.candidato = candidato;
-        this.vaga = vaga;
+    private String statusAutorizacao; // Ex: "PENDENTE_GESTOR"
+
+    public Contratacao(Candidatura candidaturaAprovada, String regime, LocalDate dataContratacao) {
+        if (!"Aprovado".equals(candidaturaAprovada.getStatus())) {
+            throw new IllegalArgumentException("Só é possível iniciar contratação de candidaturas APROVADAS.");
+        }
+        this.candidaturaAprovada = candidaturaAprovada;
         this.regime = regime;
         this.dataContratacao = dataContratacao;
+        this.statusAutorizacao = "PENDENTE_GESTOR"; // Estado inicial
     }
 
     // Getters
-    public String getCandidato() { return candidato; }
-    public Vaga getVaga() { return vaga; }
-    public String getRegime() { return regime; }
-    public LocalDate getDataContratacao() { return dataContratacao; }
+    public Candidatura getCandidaturaAprovada() {
+        return candidaturaAprovada;
+    }
 
-    // Setters
-    public void setRegime(String regime) { this.regime = regime; }
-    public void setDataContratacao(LocalDate dataContratacao) { this.dataContratacao = dataContratacao; }
+    public String getRegime() {
+        return regime;
+    }
+
+    public LocalDate getDataContratacao() {
+        return dataContratacao;
+    }
+
+    public String getStatusAutorizacao() {
+        return statusAutorizacao;
+    }
+
+    // Setter (para o Gestor)
+    public void setStatusAutorizacao(String statusAutorizacao) {
+        this.statusAutorizacao = statusAutorizacao;
+    }
 
     @Override
     public String toString() {
-        return "Contratacao [Candidato=" + candidato +
-               ", Vaga=" + vaga.getCargo() +
-               ", Regime=" + regime +
-               ", Data=" + dataContratacao + "]";
+        return "Contratação [Candidato=" + candidaturaAprovada.getCandidato().getNome() 
+                + ", Vaga=" + candidaturaAprovada.getVaga().getCargo() 
+                + ", Regime=" + regime + ", Status=" + statusAutorizacao + "]";
     }
 }
