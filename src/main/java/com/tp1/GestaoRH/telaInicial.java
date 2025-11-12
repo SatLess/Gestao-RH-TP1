@@ -60,7 +60,7 @@ public class telaInicial extends JFrame {
                 new com.tp1.GestaoRH.ADMGUI().setVisible(true);
                 new com.tp1.GestaoRH.UI.MenuFinanceiro("Administrador").setVisible(true);
             }
-            case "GestorRh" -> {
+            case "GestorRH" -> {
                 new com.tp1.GestaoRH.UI.MenuFinanceiro("GestorRH").setVisible(true);
                 new com.tp1.GestaoRH.UI.MenuRecrutamento().setVisible(true);
             }
