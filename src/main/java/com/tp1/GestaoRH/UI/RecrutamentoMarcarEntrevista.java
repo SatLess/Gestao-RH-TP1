@@ -3,10 +3,10 @@ package com.tp1.GestaoRH.UI;
 import com.tp1.GestaoRH.Candidatura.Candidatura;
 import com.tp1.GestaoRH.Candidatura.Candidato;
 import com.tp1.GestaoRH.dominio.Entrevista; 
-// Não precisamos mais do 'Recrutador', pois não validamos
 import com.tp1.GestaoRH.Misc.Helper;
 import com.tp1.GestaoRH.Misc.Constantes; 
 import com.tp1.GestaoRH.dominio.Vaga; 
+import com.tp1.GestaoRH.dominio.RepositorioUsuario; 
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
@@ -25,7 +25,7 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
     private JComboBox<String> cmbCandidato;
     private JTextField txtVagaAssociada;
     private JFormattedTextField txtData;
-    private JTextField txtNota;
+    // private JTextField txtNota; // REMOVIDO
     private JButton btnSalvar;
     private JTextField txtAvaliador; 
 
@@ -33,7 +33,7 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
 
     public RecrutamentoMarcarEntrevista() {
         setTitle("Marcar Entrevista - Recrutamento");
-        setSize(450, 400);
+        setSize(450, 350); // Reduzi a altura, pois removemos um campo
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -63,8 +63,6 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
     }
 
     private void initComponents() {
-        // ... (O código de initComponents permanece o mesmo da versão anterior) ...
-        // ... (Garantindo que 'txtAvaliador' é um JTextField) ...
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
@@ -106,25 +104,31 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
         }
         panel.add(txtData, gbc);
 
-        // Avaliador (Linha 3) - JTextField
+        // Avaliador (Linha 3)
         linha++;
         gbc.gridx = 0; gbc.gridy = linha;
         panel.add(new JLabel("Avaliador:"), gbc);
         gbc.gridx = 1;
         txtAvaliador = new JTextField(20); 
+        
+        try {
+            String nomeRecrutadorLogado = RepositorioUsuario.usuarioLogado.getLogin();
+            txtAvaliador.setText(nomeRecrutadorLogado);
+            txtAvaliador.setEditable(false);
+            txtAvaliador.setFont(txtAvaliador.getFont().deriveFont(Font.ITALIC | Font.BOLD));
+            txtAvaliador.setBackground(Color.LIGHT_GRAY);
+        } catch (Exception e) {
+            txtAvaliador.setText("ERRO: Usuário não logado");
+            txtAvaliador.setEditable(false);
+            txtAvaliador.setBackground(Color.PINK);
+        }
+        
         panel.add(txtAvaliador, gbc);
 
-        // Nota (Linha 4)
-        linha++;
-        gbc.gridx = 0; gbc.gridy = linha;
-        panel.add(new JLabel("Nota:"), gbc);
-        gbc.gridx = 1;
-        txtNota = new JTextField(20);
-        panel.add(txtNota, gbc);
 
         cmbCandidato.addActionListener(e -> atualizarVagaSelecionada());
 
-        // Botão Salvar (Linha 5)
+        // Botão Salvar (Agora na Linha 4)
         linha++;
         gbc.gridx = 0; gbc.gridy = linha; gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
@@ -155,17 +159,15 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
         }
     }
     
-
     private void salvarAgendamento() {
         
         try {
-          
             String nomeAvaliador = txtAvaliador.getText().trim();
-            if (nomeAvaliador.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Por favor, digite o nome do Avaliador.", "Campos Obrigatórios", JOptionPane.ERROR_MESSAGE);
+            
+            if (nomeAvaliador.isEmpty() || nomeAvaliador.equals("ERRO: Usuário não logado")) {
+                JOptionPane.showMessageDialog(this, "Não é possível agendar. Usuário (Avaliador) não está logado.", "Erro de Autenticação", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
             
             String dataStr = txtData.getText();
             if (dataStr.trim().equals("/  /")) {
@@ -175,13 +177,9 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate dataParseada = LocalDate.parse(dataStr, formatter);
             
-            String notaStr = txtNota.getText().trim();
-            double notaParseada = 0.0; 
-            if (!notaStr.isEmpty()) {
-                notaParseada = Double.parseDouble(notaStr.replace(",", "."));
-            }
 
-            // --- Obtenção dos Objetos-Chave ---
+            double notaParseada = 0.0; 
+
             String chaveCandidatura = (String) cmbCandidato.getSelectedItem();
             if (chaveCandidatura == null) {
                 JOptionPane.showMessageDialog(this, "Nenhum candidato selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -189,21 +187,18 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
             }
             Candidatura candidaturaAlvo = dadosCandidaturas.get(chaveCandidatura);
             
-            // Criar o objeto Entrevista (Passando a String 'nomeAvaliador')
             Entrevista novaEntrevista = new Entrevista(
                 candidaturaAlvo.getVaga(), 
                 candidaturaAlvo.getCandidato(), 
                 dataParseada, 
-                nomeAvaliador, // Passamos a String diretamente
-                notaParseada
+                nomeAvaliador, 
+                notaParseada // Passando 0.0
             );
 
-            // --- Persistência ---
             ArrayList<Entrevista> listaEntrevistas = Helper.getInstance().getEntrevistas();
             listaEntrevistas.add(novaEntrevista);
             Helper.getInstance().saveObject(listaEntrevistas, Constantes.PATH_ENTREVISTAS);
             
-            // Notificar o usuário
             JOptionPane.showMessageDialog(this, 
                 "Entrevista para " + candidaturaAlvo.getCandidato().getNome() + " agendada com sucesso!", 
                 "Agendamento Efetuado", 
@@ -211,8 +206,6 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
                 
         } catch (DateTimeParseException e) {
             JOptionPane.showMessageDialog(this, "Formato de Data inválido. Use dd/MM/yyyy.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Formato de Nota inválido. Use um número (ex: 8.5).", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Ocorreu um erro inesperado ao salvar: " + e.getMessage(), "Erro de Sistema", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
