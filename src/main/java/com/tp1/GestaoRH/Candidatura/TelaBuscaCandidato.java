@@ -6,15 +6,14 @@ package com.tp1.GestaoRH.Candidatura;
 
 import com.tp1.GestaoRH.Misc.Constantes;
 import com.tp1.GestaoRH.Misc.Helper;
+import com.tp1.GestaoRH.dominio.RepositorioUsuario;
 import java.awt.Desktop;
 import java.io.File;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Collections;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -48,6 +47,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
         candidatos = Helper.getInstance().getCandidatura();
         DefaultTableModel model = new DefaultTableModel(){
                   @Override public boolean isCellEditable(int row, int col) {
+                      if (RepositorioUsuario.usuarioLogado.getCargo().equals("GestorRH")){return false;}
         return this.getColumnName(col).equals("Cpf") == false && this.getColumnName(col).equals("Vaga") == false;  
       }
         };
@@ -77,7 +77,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
             model.addRow(row);
         }
         tabelinha.setModel(model);
-      
+        
     }
 
     private void salvarValores() throws InvalidParameterException{

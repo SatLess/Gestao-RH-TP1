@@ -95,9 +95,9 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jButton8" alignment="0" max="32767" attributes="0"/>
+                          <Component id="Inscricao" alignment="0" max="32767" attributes="0"/>
                           <Component id="jButton7" alignment="0" pref="227" max="32767" attributes="0"/>
-                          <Component id="jButton6" alignment="0" max="32767" attributes="0"/>
+                          <Component id="Cadastro" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace pref="61" max="32767" attributes="0"/>
                   </Group>
@@ -107,9 +107,9 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-                      <Component id="jButton6" min="-2" pref="28" max="-2" attributes="0"/>
+                      <Component id="Cadastro" min="-2" pref="28" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                      <Component id="jButton8" min="-2" pref="28" max="-2" attributes="0"/>
+                      <Component id="Inscricao" min="-2" pref="28" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                       <Component id="jButton7" min="-2" pref="28" max="-2" attributes="0"/>
                       <EmptySpace pref="93" max="32767" attributes="0"/>
@@ -118,20 +118,20 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JButton" name="jButton6">
+            <Component class="javax.swing.JButton" name="Cadastro">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cadastrar Candidato"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton6ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CadastroActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton8">
+            <Component class="javax.swing.JButton" name="Inscricao">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Inscrever Candidatos &#xe0; Vaga"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton8ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="InscricaoActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jButton7">
@@ -147,8 +147,8 @@
         <Container class="javax.swing.JPanel" name="Contrata&#xe7;&#xe3;o">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Gest&#xe3;o">
-                <Property name="tabTitle" type="java.lang.String" value="Gest&#xe3;o"/>
+              <JTabbedPaneConstraints tabName="Vagas">
+                <Property name="tabTitle" type="java.lang.String" value="Vagas"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>

@@ -28,16 +28,16 @@ public class MenuRecrutamento extends javax.swing.JFrame {
         setResizable(false);
         Nome.setText(RepositorioUsuario.usuarioLogado.getLogin());
         Cargo.setText(RepositorioUsuario.usuarioLogado.getCargo());
+        setUpMenuAvaliability();
 
     }
 
     public void setUpMenuAvaliability(){
-        String cargo = Cargo.getName();
+        String cargo = RepositorioUsuario.usuarioLogado.getCargo();
+        if (cargo == null) return;
         if (cargo.equals("GestorRH")){
-            
-        }
-        else {
-            
+            Cadastro.setEnabled(false);
+            Inscricao.setEnabled(false);
         }
     
     }
@@ -53,8 +53,8 @@ public class MenuRecrutamento extends javax.swing.JFrame {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         Candidatura = new javax.swing.JPanel();
-        jButton6 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
+        Cadastro = new javax.swing.JButton();
+        Inscricao = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         Contratação = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
@@ -72,17 +72,17 @@ public class MenuRecrutamento extends javax.swing.JFrame {
 
         Candidatura.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jButton6.setText("Cadastrar Candidato");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        Cadastro.setText("Cadastrar Candidato");
+        Cadastro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                CadastroActionPerformed(evt);
             }
         });
 
-        jButton8.setText("Inscrever Candidatos à Vaga");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
+        Inscricao.setText("Inscrever Candidatos à Vaga");
+        Inscricao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
+                InscricaoActionPerformed(evt);
             }
         });
 
@@ -100,18 +100,18 @@ public class MenuRecrutamento extends javax.swing.JFrame {
             .addGroup(CandidaturaLayout.createSequentialGroup()
                 .addGap(52, 52, 52)
                 .addGroup(CandidaturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Inscricao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Cadastro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(61, Short.MAX_VALUE))
         );
         CandidaturaLayout.setVerticalGroup(
             CandidaturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(CandidaturaLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Cadastro, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
-                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Inscricao, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(34, 34, 34)
                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(93, Short.MAX_VALUE))
@@ -154,7 +154,7 @@ public class MenuRecrutamento extends javax.swing.JFrame {
                 .addContainerGap(157, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Gestão", Contratação);
+        jTabbedPane1.addTab("Vagas", Contratação);
 
         jButton3.setText("Marcar Entrevista");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -281,17 +281,17 @@ public class MenuRecrutamento extends javax.swing.JFrame {
         new RecrutamentoConsultarContratacoes().setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void CadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CadastroActionPerformed
       new TelaCadastroCandidato().setVisible(true);
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_CadastroActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         new TelaBuscaCandidato().setVisible(true);
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+    private void InscricaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InscricaoActionPerformed
         new TelaCandidatura().setVisible(true);
-    }//GEN-LAST:event_jButton8ActionPerformed
+    }//GEN-LAST:event_InscricaoActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         new RecrutamentoAvaliarCandidato().setVisible(true);        // TODO add your handling code here:
@@ -333,9 +333,11 @@ public class MenuRecrutamento extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Cadastro;
     private javax.swing.JPanel Candidatura;
     private javax.swing.JLabel Cargo;
     private javax.swing.JPanel Contratação;
+    private javax.swing.JButton Inscricao;
     private javax.swing.JLabel Nome;
     private javax.swing.JPanel Vagas;
     private javax.swing.JButton jButton1;
@@ -343,9 +345,7 @@ public class MenuRecrutamento extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTabbedPane jTabbedPane1;
