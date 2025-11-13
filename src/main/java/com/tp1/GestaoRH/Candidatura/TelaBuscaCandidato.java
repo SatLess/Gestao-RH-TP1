@@ -11,8 +11,10 @@ import java.io.File;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -57,6 +59,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
         model.addColumn("Vaga");
         model.addColumn("Disponibilidade de Horario");
         model.addColumn("Status da candidatura");
+        model.addColumn("Telefone");
         for(Candidatura c: candidatos){
             String[] row = new String[model.getColumnCount()];
             row[0] = c.getCandidato().getNome();
@@ -68,12 +71,13 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
             ArrayList<String> horarios = c.getCandidato().getHorarioDisponivel().get(c.getVaga());
             System.out.println(horarios);
             row[6] = new String(horarios.getFirst()+ " - " + horarios.getLast());
-            row[7] = c.getStatus();                      
+            row[7] = c.getStatus();  
+            row[8] = c.getCandidato().getTelefone();
 
             model.addRow(row);
         }
         tabelinha.setModel(model);
-        
+      
     }
 
     private void salvarValores() throws InvalidParameterException{
@@ -94,6 +98,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Ação negada", JOptionPane.ERROR_MESSAGE);
                     throw new InvalidParameterException("");
                 }
+                candidatos.get(j).getCandidato().setTelefone(table.getValueAt(j,8).toString());
             }
         System.out.println(candidatos.get(0).getCandidato().getNome());
         Helper.getInstance().saveObject(candidatos, Constantes.PATHCANDIDATOS);
@@ -130,6 +135,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setViewportView(null);
 
         tabelinha.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -289,7 +295,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
    filtro.add(cpf.getText());
    filtro.add(endereco.getText());
    filtro.add(Vaga.getItemAt(Vaga.getSelectedIndex()));
-    filtro.add(Status.getItemAt(Status.getSelectedIndex()));
+   filtro.add(Status.getItemAt(Status.getSelectedIndex()));
    
    var sorter = new TableRowSorter<TableModel>(tabelinha.getModel());
    sorter.setRowFilter(new Sorter(filtro));

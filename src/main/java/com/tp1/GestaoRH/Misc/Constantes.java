@@ -13,6 +13,7 @@ public class Constantes {
     }
 
         public enum CANDIDATOSTATUS{
+        PENDENTE,
         EM_ANALISE,
         REJEITADO,
         APROVADO,

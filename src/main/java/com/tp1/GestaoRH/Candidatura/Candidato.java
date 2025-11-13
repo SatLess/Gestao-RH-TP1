@@ -22,9 +22,11 @@ public class Candidato extends Pessoa implements Serializable {
     private HashMap<Vaga, ArrayList<String>> horarioDisponivel = new HashMap<Vaga,ArrayList<String>>();
     private String experienciaProfissional;
     private ArrayList<File> documentacao = new ArrayList<File>();
+    private String numero;
     
-    public Candidato(String pretensaoSalarial, Vaga vaga, ArrayList<String> horarioDisponivel, String experienciaProfissional, String nome, String email, String endereço, String cpf) {
+    public Candidato(String pretensaoSalarial, Vaga vaga, ArrayList<String> horarioDisponivel, String experienciaProfissional, String nome, String email, String endereço, String cpf, String numero) {
         super(nome, email, endereço, cpf);
+        this.numero = numero;
         this.pretensaoSalarial = Float.valueOf(pretensaoSalarial);
         this.horarioDisponivel.put(vaga, horarioDisponivel);
         this.experienciaProfissional = experienciaProfissional;
@@ -58,6 +60,8 @@ public class Candidato extends Pessoa implements Serializable {
     public void setDocumentacao(ArrayList<File>   documentacao) {
         this.documentacao = documentacao;
     }
-
+    
+    public String getTelefone () {return this.numero;}
+     public void setTelefone (String telefone) {this.numero = telefone;}
     
 }

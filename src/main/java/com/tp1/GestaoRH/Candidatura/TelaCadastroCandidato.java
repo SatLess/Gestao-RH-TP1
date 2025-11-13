@@ -348,7 +348,7 @@ return;
         ArrayList<String> horarios  = new ArrayList<String>();
         horarios.add(Horario.getText());
         horarios.add(Horario1.getText());
-        Candidato novoCandidato = new Candidato(Salario.getText(),vaga, horarios, Formacao.getText(), Nome.getText(), Email.getText(), Endereco.getText(), CPF.getText());
+        Candidato novoCandidato = new Candidato(Salario.getText(),vaga, horarios, Formacao.getText(), Nome.getText(), Email.getText(), Endereco.getText(), CPF.getText(), Telefone.getText());
         novoCandidato.setDocumentacao(documentacao);
         Candidatura candidatura = new Candidatura(novoCandidato, vaga);
         candidatura.setStatus(Constantes.CANDIDATOSTATUS.EM_ANALISE);

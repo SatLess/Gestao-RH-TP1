@@ -26,7 +26,7 @@ public class Candidatura implements Serializable {
     public Candidatura(Candidato candidato, Vaga vaga) {
         this.candidato = candidato;
         this.vaga = vaga;
-        this.status = Constantes.CANDIDATOSTATUS.EM_ANALISE;
+        this.status = Constantes.CANDIDATOSTATUS.PENDENTE;
     }
 
     public Candidato getCandidato() {
@@ -52,6 +52,9 @@ public class Candidatura implements Serializable {
             
             case Constantes.CANDIDATOSTATUS.EM_ANALISE:
                 return "Em Analise";
+                
+            case Constantes.CANDIDATOSTATUS.PENDENTE:
+                return "Pendente";
         
             default:
                 return "Rejeitado";
@@ -73,6 +76,7 @@ public class Candidatura implements Serializable {
         else if (status.toLowerCase().equals("aprovado"))  {
             this.status = CANDIDATOSTATUS.APROVADO;
         }
+        else if (status.toLowerCase().equals("pendente")){this.status = CANDIDATOSTATUS.PENDENTE;}
         else {
             throw new InaccessibleObjectException("Erro: Status da candidatura inválida");
         }

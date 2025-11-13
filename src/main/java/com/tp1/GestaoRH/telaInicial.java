@@ -54,7 +54,8 @@ public class telaInicial extends JFrame {
 
         
         String cargo = u.getCargo();
-
+        RepositorioUsuario.setUsuario(u);
+        
         switch (cargo) {
             case "Administrador" -> {
                 new com.tp1.GestaoRH.ADMGUI().setVisible(true);
@@ -67,6 +68,7 @@ public class telaInicial extends JFrame {
             case "Recrutador" -> new com.tp1.GestaoRH.UI.MenuRecrutamento().setVisible(true);
             case "FuncionarioGeral" -> new com.tp1.GestaoRH.UI.MenuFinanceiro("FuncionarioGeral").setVisible(true);
             default -> {
+                RepositorioUsuario.setUsuario(null);
                 JOptionPane.showMessageDialog(this, "Cargo sem acesso ao sistema.");
                 return;
             }

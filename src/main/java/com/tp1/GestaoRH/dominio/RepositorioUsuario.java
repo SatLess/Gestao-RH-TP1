@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class RepositorioUsuario {
+    public static Usuario usuarioLogado; 
     private static final String ARQ = "usuarios.dat";
 
     @SuppressWarnings("unchecked")
@@ -41,4 +42,9 @@ public class RepositorioUsuario {
         }
         return null;
     }
+    
+    public static void setUsuario(Usuario u){
+        usuarioLogado = u;
+    }
+   
 }

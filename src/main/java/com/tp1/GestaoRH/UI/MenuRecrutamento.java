@@ -9,6 +9,7 @@ import com.tp1.GestaoRH.Candidatura.TelaCandidatura;
 import com.tp1.GestaoRH.Candidatura.TelaCadastroCandidato;
 import com.tp1.GestaoRH.*;
 import com.tp1.GestaoRH.UI.RecrutamentoCadastroVagaTela;
+import com.tp1.GestaoRH.dominio.RepositorioUsuario;
 import javax.swing.*;
 
 /**
@@ -25,9 +26,22 @@ public class MenuRecrutamento extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
+        Nome.setText(RepositorioUsuario.usuarioLogado.getLogin());
+        Cargo.setText(RepositorioUsuario.usuarioLogado.getCargo());
 
     }
 
+    public void setUpMenuAvaliability(){
+        String cargo = Cargo.getName();
+        if (cargo.equals("GestorRH")){
+            
+        }
+        else {
+            
+        }
+    
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -51,8 +65,8 @@ public class MenuRecrutamento extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        Nome = new javax.swing.JLabel();
+        Cargo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -205,9 +219,9 @@ public class MenuRecrutamento extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/windows-7-user-icon.png"))); // NOI18N
 
-        jLabel2.setText("Nome");
+        Nome.setText("Nome");
 
-        jLabel3.setText("Cargo");
+        Cargo.setText("Cargo");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -222,9 +236,9 @@ public class MenuRecrutamento extends javax.swing.JFrame {
                         .addGap(17, 17, 17)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel2)
+                        .addComponent(Nome)
                         .addGap(42, 42, 42)
-                        .addComponent(jLabel3)))
+                        .addComponent(Cargo)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -237,8 +251,8 @@ public class MenuRecrutamento extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(19, 19, 19)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))))
+                            .addComponent(Nome)
+                            .addComponent(Cargo))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -320,7 +334,9 @@ public class MenuRecrutamento extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Candidatura;
+    private javax.swing.JLabel Cargo;
     private javax.swing.JPanel Contratação;
+    private javax.swing.JLabel Nome;
     private javax.swing.JPanel Vagas;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -332,8 +348,6 @@ public class MenuRecrutamento extends javax.swing.JFrame {
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 }
