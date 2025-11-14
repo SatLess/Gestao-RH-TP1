@@ -46,19 +46,7 @@ public class Candidatura implements Serializable {
     }
 
     public String getStatus() {
-        switch (this.status) {
-            case Constantes.CANDIDATOSTATUS.APROVADO:
-                return new String("Aprovado");
-            
-            case Constantes.CANDIDATOSTATUS.EM_ANALISE:
-                return "Em Analise";
-                
-            case Constantes.CANDIDATOSTATUS.PENDENTE:
-                return "Pendente";
-        
-            default:
-                return "Rejeitado";
-        }
+        return status.toString();
     }
     
 
@@ -67,7 +55,7 @@ public class Candidatura implements Serializable {
     }
  
     public void setStatus(String status) throws InvalidParameterException {
-        if (status.toLowerCase().equals("em analise")){
+        if (status.toLowerCase().replace("_", " ").equals("em analise")){
             this.status  = CANDIDATOSTATUS.EM_ANALISE;
         }
         else if (status.toLowerCase().equals("rejeitado")) {

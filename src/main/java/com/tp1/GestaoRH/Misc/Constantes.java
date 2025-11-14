@@ -19,7 +19,7 @@ public class Constantes {
         APROVADO,
     }
     
-    public static final String PATHCANDIDATOS = "candidatos.txt";
+    public static final String PATHCANDIDATOS = "candidatos.dat";
     public static final String PATH_RECRUTADORES = "recrutadores.dat";
     public static final String PATH_ENTREVISTAS = "entrevistas.dat";
     public static final String PATH_CONTRATACOES = "contratacoes.dat";

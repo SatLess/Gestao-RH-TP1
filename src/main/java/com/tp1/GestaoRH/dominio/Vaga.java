@@ -36,6 +36,7 @@ public class Vaga implements Serializable {
     }
 
     public String getCargo() {
+        System.out.println(cargo);
         return cargo;
     }
 

@@ -14,6 +14,7 @@ import javax.swing.RowFilter;
 public class Sorter extends RowFilter {
     
     private ArrayList<String> filtros = new ArrayList<String>();
+    boolean isAllBlank = true;
     
     @Override
     public boolean include(Entry e){
@@ -22,6 +23,7 @@ public class Sorter extends RowFilter {
             for (int j = 0; j < filtros.size(); j++){
             
                 if (filtros.get(j).isBlank()) continue;
+                isAllBlank = false;
                 
                 if (e.getStringValue(i).contains(filtros.get(j))){
                     System.out.println(e.getStringValue(i));
@@ -29,7 +31,7 @@ public class Sorter extends RowFilter {
             }
         
         }
-        return false;
+        return isAllBlank;
     }
 
     public Sorter(ArrayList<String> a) {

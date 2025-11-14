@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class RepositorioUsuario {
-    public static Usuario usuarioLogado; 
+    public static Usuario usuarioLogado = new Usuario("rec", "123", "Teste"); 
     private static final String ARQ = "usuarios.dat";
 
     @SuppressWarnings("unchecked")

@@ -49,9 +49,11 @@ public class MenuRecrutamento extends javax.swing.JFrame {
 
         if (cargo.equals("GestorRH")) {
             
-            // 1. Gestor NÃO mexe em Candidatura. Desabilita a aba inteira.
+            // 1. Gestor pode buscar candidatos na aba, então desabilitar apenas outras funções de cadastro
             if (indexCandidatura != -1) {
-                jTabbedPane1.setEnabledAt(indexCandidatura, false);
+                Cadastro.setEnabled(false);
+                Inscricao.setEnabled(false);
+
             }
 
             // 2. Gestor VÊ a aba "Vagas" (Painel 'Contratação')

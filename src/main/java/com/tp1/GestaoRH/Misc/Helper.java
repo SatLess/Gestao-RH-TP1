@@ -69,8 +69,8 @@ public class Helper {
     }
 
     public ArrayList<Candidatura> getCandidatura() {
-        if (new File("candidatos.txt").exists() == true){
-           candidaturas = (ArrayList<Candidatura>) loadObject("candidatos.txt");
+        if (new File("candidatos.dat").exists() == true){
+           candidaturas = (ArrayList<Candidatura>) loadObject("candidatos.dat");
         }
         return candidaturas;
         
@@ -126,6 +126,7 @@ public class Helper {
         List<Vaga> v = RecrutamentoPersistencia.carregarVagas();
         for (Vaga va : v){
             if (va.getCargo().equals(cargo)){
+                System.out.println(va.getCargo());
             return va;
             }
         }

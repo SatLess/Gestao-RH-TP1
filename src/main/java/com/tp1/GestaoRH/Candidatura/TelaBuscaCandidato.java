@@ -8,11 +8,19 @@ import com.tp1.GestaoRH.Misc.Constantes;
 import com.tp1.GestaoRH.Misc.Helper;
 import com.tp1.GestaoRH.dominio.RepositorioUsuario;
 import java.awt.Desktop;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -21,11 +29,34 @@ import javax.swing.table.TableRowSorter;
  *
  * @author spiri
  */
+
+ class OptionListener implements ListSelectionListener  {
+
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        if (button.getName() != null){
+            button.setEnabled(tabelinha.getSelectedRow() != -1);
+        }
+        else
+        button.setEnabled(RepositorioUsuario.usuarioLogado.getCargo().equals("Recrutador") && tabelinha.getSelectedRow() != -1);
+    }
+     
+        private JButton button;
+        private JTable tabelinha;
+     
+    public OptionListener(JButton button, JTable tabelinha) {
+        this.button = button;
+        this.tabelinha = tabelinha;
+    }
+}
+
+
+
 public class TelaBuscaCandidato extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaBuscaCandidato.class.getName());
     private ArrayList<Candidatura> candidatos;
-
+    
 
     /**
      * Creates new form Candidaturas
@@ -35,13 +66,18 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setUpTable();
         Status.addItem("");
+        Status.addItem(Constantes.CANDIDATOSTATUS.PENDENTE.toString());
         Status.addItem(Constantes.CANDIDATOSTATUS.EM_ANALISE.toString());
         Status.addItem(Constantes.CANDIDATOSTATUS.APROVADO.toString());
         Status.addItem(Constantes.CANDIDATOSTATUS.REJEITADO.toString());
         Helper.getInstance().listarVagas(Vaga);
-        
-        
+        tabelinha.getColumnModel().getSelectionModel().addListSelectionListener(new OptionListener(this.Salvar1, tabelinha));
+        tabelinha.getColumnModel().getSelectionModel().addListSelectionListener(new OptionListener(this.Exluir, tabelinha));
+        tabelinha.getColumnModel().getSelectionModel().addListSelectionListener(new OptionListener(this.AddDoc, tabelinha));
+        tabelinha.getColumnModel().getSelectionModel().addListSelectionListener(new OptionListener(this.AbrirDoc, tabelinha));
     }
+    
+
     
     private void setUpTable(){
         candidatos = Helper.getInstance().getCandidatura();
@@ -67,7 +103,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
             row[2] = c.getCandidato().getEndereço();
             row[3] = c.getCandidato().getEmail();
             row[4] = String.valueOf(c.getCandidato().getPretensaoSalarial());
-            row[6]  = c.getVaga().getCargo();
+            row[5]  = c.getVaga().getCargo();
             ArrayList<String> horarios = c.getCandidato().getHorarioDisponivel().get(c.getVaga());
             System.out.println(horarios);
             row[6] = new String(horarios.getFirst()+ " - " + horarios.getLast());
@@ -130,7 +166,8 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
         endereco = new javax.swing.JTextField();
         Vaga = new javax.swing.JComboBox<>();
         Status = new javax.swing.JComboBox<>();
-        Pesquisar1 = new javax.swing.JButton();
+        AbrirDoc = new javax.swing.JButton();
+        AddDoc = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -160,6 +197,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
         jLabel1.setText("Filtros");
 
         Salvar1.setText("Salvar");
+        Salvar1.setEnabled(false);
         Salvar1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Salvar1ActionPerformed(evt);
@@ -168,7 +206,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
 
         jLabel2.setText("Nome");
 
-        jLabel3.setText("Endereço");
+        jLabel3.setText("Telefone");
 
         jLabel4.setText("CPF");
 
@@ -177,6 +215,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
         jLabel6.setText("Status da Canidatura");
 
         Exluir.setText("Excluir Candidato");
+        Exluir.setEnabled(false);
         Exluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ExluirActionPerformed(evt);
@@ -196,10 +235,26 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
             }
         });
 
-        Pesquisar1.setText("Abrir Documentação");
-        Pesquisar1.addActionListener(new java.awt.event.ActionListener() {
+        Status.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Pesquisar1ActionPerformed(evt);
+                StatusActionPerformed(evt);
+            }
+        });
+
+        AbrirDoc.setText("Abrir Documentação");
+        AbrirDoc.setEnabled(false);
+        AbrirDoc.setName("AddDoc"); // NOI18N
+        AbrirDoc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AbrirDocActionPerformed(evt);
+            }
+        });
+
+        AddDoc.setText("Adicionar Documentação");
+        AddDoc.setEnabled(false);
+        AddDoc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddDocActionPerformed(evt);
             }
         });
 
@@ -233,10 +288,11 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
                                     .addComponent(cpf)
                                     .addComponent(endereco)
                                     .addComponent(Vaga, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(Pesquisar1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(AbrirDoc, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AddDoc, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 999, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(335, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(55, 55, 55)
@@ -271,16 +327,18 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Pesquisar1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(AbrirDoc, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(AddDoc, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(Exluir, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(67, 67, 67))
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(359, Short.MAX_VALUE)
+                    .addContainerGap(409, Short.MAX_VALUE)
                     .addComponent(Salvar1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(11, 11, 11)))
         );
@@ -345,7 +403,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_VagaActionPerformed
 
-    private void Pesquisar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Pesquisar1ActionPerformed
+    private void AbrirDocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AbrirDocActionPerformed
         
                        if (tabelinha.getSelectedRow() == -1) {
                         JOptionPane.showMessageDialog(rootPane, "Escolha um candidato para abrir seus documentos", "Pesquisa Negada", JOptionPane.ERROR_MESSAGE);
@@ -362,7 +420,37 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
             catch (Exception e){JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Pesquisa Negada", JOptionPane.ERROR_MESSAGE);}
         }
          
-    }//GEN-LAST:event_Pesquisar1ActionPerformed
+    }//GEN-LAST:event_AbrirDocActionPerformed
+
+    private void StatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StatusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_StatusActionPerformed
+
+    private void AddDocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddDocActionPerformed
+                        try {
+            JFileChooser file = new JFileChooser();
+            FileNameExtensionFilter F = new FileNameExtensionFilter(null, "pdf");
+            file.setFileFilter(F);
+            file.setCurrentDirectory(new File("."));
+            int approve = file.showOpenDialog(null);
+           
+            
+            if (approve == JFileChooser.APPROVE_OPTION){
+                
+                File f = new File(file.getSelectedFile().getAbsolutePath());
+                candidatos.get(tabelinha.getSelectedRow()).getCandidato().getDocumentacao().add(f);
+                Helper.getInstance().saveObject(candidatos, Constantes.PATHCANDIDATOS);
+                System.out.println(f);
+            }
+            
+            
+            
+            
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_AddDocActionPerformed
 
     /**
      * @param args the command line arguments
@@ -390,10 +478,11 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AbrirDoc;
+    private javax.swing.JButton AddDoc;
     private javax.swing.JButton Exluir;
     private javax.swing.JTextField Nome;
     private javax.swing.JButton Pesquisar;
-    private javax.swing.JButton Pesquisar1;
     private javax.swing.JButton Salvar1;
     private javax.swing.JComboBox<String> Status;
     private javax.swing.JComboBox<String> Vaga;
