@@ -1,7 +1,7 @@
 package com.tp1.GestaoRH.UI;
 
 import com.tp1.GestaoRH.Candidatura.Candidatura;
-import com.tp1.GestaoRH.dominio.Contratacao;
+import com.tp1.GestaoRH.dominio.Contratacao; 
 import com.tp1.GestaoRH.dominio.Entrevista; 
 import com.tp1.GestaoRH.Misc.Helper;
 import com.tp1.GestaoRH.Misc.Constantes;
@@ -40,8 +40,14 @@ public class RecrutamentoSolicitarContratacao extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         
-        carregarCandidaturasEmAnalise();
-        initComponents();
+        // Inicializa o mapa primeiro
+        this.dadosCandidaturas = new HashMap<>(); 
+        
+        // Cria os componentes (vazios)
+        initComponents(); 
+        
+        // Popula os componentes
+        carregarCandidaturasEmAnalise(); 
     }
 
     private void initComponents() {
@@ -57,7 +63,7 @@ public class RecrutamentoSolicitarContratacao extends JFrame {
         gbc.gridx = 0; gbc.gridy = linha;
         panel.add(new JLabel("Candidatura (Em Análise):"), gbc);
         gbc.gridx = 1;
-        cmbCandidaturasEmAnalise = new JComboBox<>(dadosCandidaturas.keySet().toArray(new String[0]));
+        cmbCandidaturasEmAnalise = new JComboBox<>(); // Criado vazio
         panel.add(cmbCandidaturasEmAnalise, gbc);
 
         // Linha 1
@@ -108,7 +114,6 @@ public class RecrutamentoSolicitarContratacao extends JFrame {
         }
         panel.add(txtData, gbc);
         
-        // Ação de Habilitar/Desabilitar (AGORA CORRETO)
         ActionListener listener = e -> atualizarVisibilidadeCampos();
         rbAprovar.addActionListener(listener);
         rbReprovar.addActionListener(listener);
@@ -137,17 +142,27 @@ public class RecrutamentoSolicitarContratacao extends JFrame {
     }
 
     private void carregarCandidaturasEmAnalise() {
-        this.dadosCandidaturas = new HashMap<>();
+        this.dadosCandidaturas.clear();
+        cmbCandidaturasEmAnalise.removeAllItems();
         
         try {
             ArrayList<Candidatura> candidaturas = Helper.getInstance().getCandidatura();
 
             for (Candidatura c : candidaturas) {
-                if ("Em Analise".equals(c.getStatus())) {
+
+                if ("EM_ANALISE".equalsIgnoreCase(c.getStatus().trim())) {
                     String chaveExibicao = c.getCandidato().getNome() + " (Vaga: " + c.getVaga().getCargo() + ")";
                     this.dadosCandidaturas.put(chaveExibicao, c);
+                    cmbCandidaturasEmAnalise.addItem(chaveExibicao);
                 }
             }
+            
+            if (cmbCandidaturasEmAnalise.getItemCount() == 0) {
+                 cmbCandidaturasEmAnalise.addItem("Nenhuma candidatura em análise");
+                 cmbCandidaturasEmAnalise.setEnabled(false);
+                 btnSalvar.setEnabled(false);
+            }
+
         } catch (Exception e) {
             System.err.println("Erro ao carregar candidaturas: " + e.getMessage());
         }
@@ -156,8 +171,8 @@ public class RecrutamentoSolicitarContratacao extends JFrame {
     private void salvarDecisaoEContratacao() {
         try {
             String chaveSelecionada = (String) cmbCandidaturasEmAnalise.getSelectedItem();
-            if (chaveSelecionada == null) {
-                JOptionPane.showMessageDialog(this, "Nenhuma candidatura selecionada.", "Erro", JOptionPane.ERROR_MESSAGE);
+            if (chaveSelecionada == null || !dadosCandidaturas.containsKey(chaveSelecionada)) {
+                JOptionPane.showMessageDialog(this, "Nenhuma candidatura válida selecionada.", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             Candidatura candidaturaAlvo = dadosCandidaturas.get(chaveSelecionada);
@@ -220,10 +235,9 @@ public class RecrutamentoSolicitarContratacao extends JFrame {
                 JOptionPane.showMessageDialog(this, "Candidato REJEITADO com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             }
             
+            // Recarrega o JComboBox
             carregarCandidaturasEmAnalise();
-            cmbCandidaturasEmAnalise.setModel(new DefaultComboBoxModel<>(dadosCandidaturas.keySet().toArray(new String[0])));
             
-
         } catch (DateTimeParseException e) {
             JOptionPane.showMessageDialog(this, "Formato de Data inválido. Use dd/MM/yyyy.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
@@ -231,7 +245,6 @@ public class RecrutamentoSolicitarContratacao extends JFrame {
             ex.printStackTrace();
         }
     }
-
 
     private Candidatura encontrarCandidaturaOriginal(Candidatura c, ArrayList<Candidatura> lista) {
         try {
@@ -261,7 +274,6 @@ public class RecrutamentoSolicitarContratacao extends JFrame {
         } catch (Exception e) { return null; }
         return null;
     }
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new RecrutamentoSolicitarContratacao().setVisible(true));

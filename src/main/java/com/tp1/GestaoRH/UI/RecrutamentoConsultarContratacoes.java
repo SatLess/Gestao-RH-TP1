@@ -1,18 +1,21 @@
 package com.tp1.GestaoRH.UI;
 
 import com.tp1.GestaoRH.dominio.Contratacao;
-import com.tp1.GestaoRH.dominio.Entrevista; // Importação necessária
+import com.tp1.GestaoRH.dominio.Entrevista;
 import com.tp1.GestaoRH.Misc.Helper;
 import com.tp1.GestaoRH.Misc.Constantes;
 import com.tp1.GestaoRH.dominio.RepositorioUsuario;
+import com.tp1.GestaoRH.dominio.Vaga; // Importação necessária
+import com.tp1.GestaoRH.dominio.RecrutamentoPersistencia; // Importação necessária
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap; // Importação necessária
-import java.util.Map; // Importação necessária
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List; // Importação necessária
 
 public class RecrutamentoConsultarContratacoes extends JFrame {
     private JTable table;
@@ -24,7 +27,7 @@ public class RecrutamentoConsultarContratacoes extends JFrame {
 
     public RecrutamentoConsultarContratacoes() {
         setTitle("Consultar Contratações");
-        setSize(850, 400); // Aumentei a largura para a nova coluna
+        setSize(850, 400); 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -45,17 +48,15 @@ public class RecrutamentoConsultarContratacoes extends JFrame {
             
             @Override
             public Class<?> getColumnClass(int columnIndex) {
-                if (columnIndex == 6) { // Coluna "Nota"
-                    return Double.class; // Informa que é um número para ordenação correta
+                if (columnIndex == 6) { 
+                    return Double.class; 
                 }
                 return String.class;
             }
         };
 
         table = new JTable(model);
-        
-        table.setAutoCreateRowSorter(true); // HABILITA A ORDENAÇÃO (REQUISITO 2)
-        
+        table.setAutoCreateRowSorter(true); 
         JScrollPane scroll = new JScrollPane(table);
 
         btnAtualizar = new JButton("Atualizar");
@@ -92,7 +93,6 @@ public class RecrutamentoConsultarContratacoes extends JFrame {
     private void carregarContratacoes() {
         model.setRowCount(0);
 
-        // 1. Carrega as notas das entrevistas (o "join")
         ArrayList<Entrevista> listaEntrevistas = Helper.getInstance().getEntrevistas();
         Map<String, Double> notasMap = new HashMap<>();
         if (listaEntrevistas != null) {
@@ -106,7 +106,6 @@ public class RecrutamentoConsultarContratacoes extends JFrame {
             }
         }
 
-        // 2. Carrega as contratações
         ArrayList<Contratacao> listaContratacoes = Helper.getInstance().getContratacoes();
         
         if (listaContratacoes == null || listaContratacoes.isEmpty()) {
@@ -123,9 +122,8 @@ public class RecrutamentoConsultarContratacoes extends JFrame {
                 String data = c.getDataContratacao().format(dtf);
                 String status = c.getStatusAutorizacao();
                 
-                // Busca a nota correspondente
                 String key = cpf + vaga;
-                Double nota = notasMap.getOrDefault(key, 0.0); // 0.0 se não encontrar
+                Double nota = notasMap.getOrDefault(key, 0.0); 
 
                 model.addRow(new Object[]{cpf, nome, vaga, regime, data, status, nota});
                 
@@ -143,12 +141,9 @@ public class RecrutamentoConsultarContratacoes extends JFrame {
             return;
         }
         
-        // Converte o índice visual (ordenado) para o índice real do modelo
         int modelRow = table.convertRowIndexToModel(selectedRowVisual);
         
         ArrayList<Contratacao> listaContratacoes = Helper.getInstance().getContratacoes();
-        
-        // Pega pelo índice do modelo, que corresponde à lista
         Contratacao contratacaoAlvo = listaContratacoes.get(modelRow);
 
         if ("AUTORIZADO".equals(contratacaoAlvo.getStatusAutorizacao())) {
@@ -164,10 +159,35 @@ public class RecrutamentoConsultarContratacoes extends JFrame {
             
         if (confirm == JOptionPane.YES_OPTION) {
             try {
+
                 contratacaoAlvo.setStatusAutorizacao("AUTORIZADO");
                 Helper.getInstance().saveObject(listaContratacoes, Constantes.PATH_CONTRATACOES);
+                
+
+                Vaga vagaParaFechar = contratacaoAlvo.getCandidaturaAprovada().getVaga();
+                String cargoDaVaga = vagaParaFechar.getCargo(); // Usando cargo como ID
+
+                List<Vaga> todasAsVagas = RecrutamentoPersistencia.carregarVagas();
+                
+                boolean vagaAtualizada = false;
+                for (Vaga v : todasAsVagas) {
+                    if (v.getCargo().equals(cargoDaVaga)) {
+                        v.setStatus(Constantes.STATUS.FECHADA);
+                        vagaAtualizada = true;
+                        break;
+                    }
+                }
+                
+                if (vagaAtualizada) {
+                    RecrutamentoPersistencia.salvarVagas(todasAsVagas);
+                } else {
+                    System.err.println("Aviso: A vaga " + cargoDaVaga + " foi autorizada, mas não encontrada no arquivo mestre de vagas para fechar.");
+                }
+
+
                 carregarContratacoes();
-                JOptionPane.showMessageDialog(this, "Contratação autorizada com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Contratação autorizada e vaga fechada com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Erro ao salvar autorização: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }

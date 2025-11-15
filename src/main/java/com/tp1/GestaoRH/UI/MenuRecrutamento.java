@@ -25,13 +25,26 @@ public class MenuRecrutamento extends javax.swing.JFrame {
         setResizable(false);
         
         if (RepositorioUsuario.usuarioLogado != null) {
-            Nome.setText(RepositorioUsuario.usuarioLogado.getLogin());
+            
+            // Lógica para abreviar nomes longos
+            String nomeCompleto = RepositorioUsuario.usuarioLogado.getLogin();
+            if (nomeCompleto.length() > 15) { // Se o nome tiver mais de 15 chars
+                 String[] partes = nomeCompleto.split(" ");
+                 if (partes.length > 1) {
+                     Nome.setText(partes[0] + " " + partes[partes.length-1].charAt(0) + "."); // Ex: "Pedro G."
+                 } else {
+                     Nome.setText(nomeCompleto.substring(0, 15) + "..."); // Corta
+                 }
+            } else {
+                Nome.setText(nomeCompleto); // Nome curto
+            }
+
             Cargo.setText(RepositorioUsuario.usuarioLogado.getCargo());
-            setUpMenuAvaliability(); // Chamado DEPOIS de carregar o usuário
+            setUpMenuAvaliability(); 
         } else {
             Nome.setText("Usuário N/A");
             Cargo.setText("N/A");
-            jTabbedPane1.setEnabled(false); // Trava tudo se não houver login
+            jTabbedPane1.setEnabled(false); 
         }
     }
 
@@ -42,51 +55,34 @@ public class MenuRecrutamento extends javax.swing.JFrame {
             return;
         }
         
-        // Encontra os índices das abas pelos JPanels
         int indexCandidatura = jTabbedPane1.indexOfComponent(Candidatura);
-        int indexVagas = jTabbedPane1.indexOfComponent(Contratação); // O JPanel de Vagas chama 'Contratação'
-        int indexRecrutamento = jTabbedPane1.indexOfComponent(Vagas); // O JPanel de Recrutamento chama 'Vagas'
+        int indexVagas = jTabbedPane1.indexOfComponent(Contratação); 
+        int indexRecrutamento = jTabbedPane1.indexOfComponent(Vagas); 
 
         if (cargo.equals("GestorRH")) {
             
-            // 1. Gestor pode buscar candidatos na aba, então desabilitar apenas outras funções de cadastro
             if (indexCandidatura != -1) {
-                Cadastro.setEnabled(false);
-                Inscricao.setEnabled(false);
-
+                 jTabbedPane1.setEnabledAt(indexCandidatura, false); // Desabilita a aba inteira
             }
 
-            // 2. Gestor VÊ a aba "Vagas" (Painel 'Contratação')
-            
-            // 3. Gestor VÊ a aba "Recrutamento", mas com botões limitados
             jButton3.setEnabled(false); // Marcar Entrevista
             jButton4.setEnabled(false); // Avaliar e Solicitar
 
-            // (jButton5 - Consultar/Autorizar fica ATIVO)
-
-            // 4. CORREÇÃO DA FALHA DE SEGURANÇA: Mudar o foco da aba
             if (indexVagas != -1) {
                 jTabbedPane1.setSelectedIndex(indexVagas);
             }
 
         } else if (cargo.equals("Recrutador")) {
             
-            // 1. Recrutador VÊ a aba "Candidatura" (é a aba padrão 0)
-            
-            // 2. Recrutador NÃO mexe em Vagas. Desabilita a aba inteira.
             if (indexVagas != -1) {
                 jTabbedPane1.setEnabledAt(indexVagas, false);
             }
             
-            // 3. Recrutador VÊ a aba "Recrutamento"
-            
         } else {
-            // Se não for nenhum dos dois, desabilita tudo por segurança
             jTabbedPane1.setEnabled(false);
         }
     }
     
- 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -106,6 +102,7 @@ public class MenuRecrutamento extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         Nome = new javax.swing.JLabel();
         Cargo = new javax.swing.JLabel();
+        btnSair = new javax.swing.JButton(); // BOTÃO ADICIONADO
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -248,6 +245,13 @@ public class MenuRecrutamento extends javax.swing.JFrame {
 
         Cargo.setText("Cargo");
 
+        btnSair.setText("Sair");
+        btnSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSairActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -261,9 +265,11 @@ public class MenuRecrutamento extends javax.swing.JFrame {
                         .addGap(17, 17, 17)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(Nome)
-                        .addGap(42, 42, 42)
-                        .addComponent(Cargo)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Nome)
+                            .addComponent(Cargo))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -277,7 +283,10 @@ public class MenuRecrutamento extends javax.swing.JFrame {
                         .addGap(19, 19, 19)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(Nome)
-                            .addComponent(Cargo))))
+                            .addComponent(btnSair))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Cargo)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -318,6 +327,16 @@ public class MenuRecrutamento extends javax.swing.JFrame {
         new TelaCandidatura().setVisible(true);
     }//GEN-LAST:event_InscricaoActionPerformed
 
+    // Ação para o botão Sair
+    private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {
+        // Limpa o usuário logado
+        RepositorioUsuario.usuarioLogado = null;
+        // Fecha a tela atual
+        this.dispose();
+        // Abre a tela de login (Assumindo que o nome é telaInicial)
+        new telaInicial().setVisible(true); 
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -361,6 +380,7 @@ public class MenuRecrutamento extends javax.swing.JFrame {
     private javax.swing.JButton Inscricao;
     private javax.swing.JLabel Nome;
     private javax.swing.JPanel Vagas;
+    private javax.swing.JButton btnSair; // Botão adicionado às variáveis
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

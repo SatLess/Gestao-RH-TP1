@@ -17,49 +17,32 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter; 
 import java.time.format.DateTimeParseException; 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RecrutamentoMarcarEntrevista extends JFrame {
 
-    private JComboBox<String> cmbCandidato;
+    private JTextField txtCpfCandidato;
+    private JButton btnBuscarCandidato;
+    
+    private JTextField txtNomeCandidato; 
+    
     private JTextField txtVagaAssociada;
     private JFormattedTextField txtData;
-    // private JTextField txtNota; // REMOVIDO
     private JButton btnSalvar;
     private JTextField txtAvaliador; 
 
-    private Map<String, Candidatura> dadosCandidaturas;
+    private Candidatura candidaturaEncontrada;
 
     public RecrutamentoMarcarEntrevista() {
         setTitle("Marcar Entrevista - Recrutamento");
-        setSize(450, 350); // Reduzi a altura, pois removemos um campo
+        setSize(450, 400); // Aumentei a altura para o novo campo
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-
-        carregarDadosReais();
+        
         initComponents();
-        atualizarVagaSelecionada();
-    }
-
-    private void carregarDadosReais() {
-        this.dadosCandidaturas = new HashMap<>();
-        ArrayList<Candidatura> listaDeCandidaturas = Helper.getInstance().getCandidatura();
-
-        if (listaDeCandidaturas == null) return;
-
-        for (Candidatura candidatura : listaDeCandidaturas) {
-            if ("Em Analise".equals(candidatura.getStatus())) {
-                try {
-                    String nomeCandidato = candidatura.getCandidato().getNome();
-                    String nomeVaga = candidatura.getVaga().getCargo(); 
-                    String chaveUnica = nomeCandidato + " (" + nomeVaga + ")";
-                    this.dadosCandidaturas.put(chaveUnica, candidatura);
-                } catch (Exception e) {
-                    System.err.println("Erro ao processar candidatura: " + e.getMessage());
-                }
-            }
-        }
+        
+        // Desabilita campos até a busca
+        btnSalvar.setEnabled(false);
+        txtData.setEnabled(false);
     }
 
     private void initComponents() {
@@ -72,14 +55,30 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
 
         int linha = 0;
 
-        // Candidato (Linha 0)
+        // Linha 0: CPF
         gbc.gridx = 0; gbc.gridy = linha;
-        panel.add(new JLabel("Candidato / Vaga:"), gbc);
+        panel.add(new JLabel("CPF Candidato:"), gbc);
+        
+        JPanel buscaPanel = new JPanel(new BorderLayout(5, 0));
+        txtCpfCandidato = new JTextField(15);
+        btnBuscarCandidato = new JButton("Buscar");
+        buscaPanel.add(txtCpfCandidato, BorderLayout.CENTER);
+        buscaPanel.add(btnBuscarCandidato, BorderLayout.EAST);
+        
         gbc.gridx = 1;
-        cmbCandidato = new JComboBox<>(dadosCandidaturas.keySet().toArray(new String[0]));
-        panel.add(cmbCandidato, gbc);
+        panel.add(buscaPanel, gbc);
 
-        // Vaga Associada (Linha 1)
+        linha++;
+        gbc.gridx = 0; gbc.gridy = linha;
+        panel.add(new JLabel("Candidato:"), gbc);
+        gbc.gridx = 1;
+        txtNomeCandidato = new JTextField(20);
+        txtNomeCandidato.setEditable(false);
+        txtNomeCandidato.setFont(txtNomeCandidato.getFont().deriveFont(Font.ITALIC | Font.BOLD));
+        txtNomeCandidato.setBackground(Color.LIGHT_GRAY);
+        panel.add(txtNomeCandidato, gbc);
+
+        // Linha 2: Vaga
         linha++;
         gbc.gridx = 0; gbc.gridy = linha;
         panel.add(new JLabel("Vaga Associada:"), gbc);
@@ -90,7 +89,7 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
         txtVagaAssociada.setBackground(Color.LIGHT_GRAY);
         panel.add(txtVagaAssociada, gbc);
 
-        // Data (Linha 2)
+        // Linha 3: Data
         linha++;
         gbc.gridx = 0; gbc.gridy = linha;
         panel.add(new JLabel("Data (dd/MM/yyyy):"), gbc);
@@ -104,7 +103,7 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
         }
         panel.add(txtData, gbc);
 
-        // Avaliador (Linha 3)
+        // Linha 4: Avaliador
         linha++;
         gbc.gridx = 0; gbc.gridy = linha;
         panel.add(new JLabel("Avaliador:"), gbc);
@@ -125,10 +124,9 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
         
         panel.add(txtAvaliador, gbc);
 
+        btnBuscarCandidato.addActionListener(e -> buscarCandidatoPorCpf());
 
-        cmbCandidato.addActionListener(e -> atualizarVagaSelecionada());
-
-        // Botão Salvar (Agora na Linha 4)
+        // Linha 5: Botão Salvar
         linha++;
         gbc.gridx = 0; gbc.gridy = linha; gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
@@ -146,21 +144,61 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
         center.insets = new Insets(10, 10, 10, 10);
         getContentPane().add(panel, center);
     }
+    
+    private void buscarCandidatoPorCpf() {
+        String cpf = txtCpfCandidato.getText().trim();
+        if (cpf.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Digite um CPF.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-    private void atualizarVagaSelecionada() {
-        String chaveSelecionada = (String) cmbCandidato.getSelectedItem();
-        if (chaveSelecionada != null) {
-            Candidatura cand = dadosCandidaturas.get(chaveSelecionada);
-            if (cand != null) {
-                txtVagaAssociada.setText(cand.getVaga().getCargo());
-            } else {
-                txtVagaAssociada.setText("Vaga não encontrada");
+        ArrayList<Candidatura> lista = Helper.getInstance().getCandidatura();
+        if (lista == null) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar lista de candidaturas.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        this.candidaturaEncontrada = null;
+        
+        for (Candidatura c : lista) {
+            try {
+                if (c.getCandidato().getCpf().equals(cpf)) {
+                    if ("EM_ANALISE".equalsIgnoreCase(c.getStatus().trim())) {
+                        this.candidaturaEncontrada = c;
+                        break; 
+                    }
+                }
+            } catch (Exception e) {
+                // Ignora candidatura inválida
             }
+        }
+
+        if (this.candidaturaEncontrada != null) {
+
+            txtNomeCandidato.setText(this.candidaturaEncontrada.getCandidato().getNome());
+            txtVagaAssociada.setText(this.candidaturaEncontrada.getVaga().getCargo());
+            
+            JOptionPane.showMessageDialog(this, "Candidato encontrado.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            btnSalvar.setEnabled(true);
+            txtData.setEnabled(true);
+        } else {
+            // Limpa os campos
+            txtNomeCandidato.setText("");
+            txtVagaAssociada.setText("");
+            JOptionPane.showMessageDialog(this, "Nenhum candidato 'EM ANÁLISE' encontrado com este CPF.", "Não Encontrado", JOptionPane.ERROR_MESSAGE);
+            btnSalvar.setEnabled(false);
+            txtData.setEnabled(false);
+            this.candidaturaEncontrada = null;
         }
     }
     
     private void salvarAgendamento() {
         
+        if (this.candidaturaEncontrada == null) {
+            JOptionPane.showMessageDialog(this, "Nenhum candidato selecionado. Busque um CPF válido primeiro.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+            
         try {
             String nomeAvaliador = txtAvaliador.getText().trim();
             
@@ -177,22 +215,15 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate dataParseada = LocalDate.parse(dataStr, formatter);
             
-
             double notaParseada = 0.0; 
-
-            String chaveCandidatura = (String) cmbCandidato.getSelectedItem();
-            if (chaveCandidatura == null) {
-                JOptionPane.showMessageDialog(this, "Nenhum candidato selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            Candidatura candidaturaAlvo = dadosCandidaturas.get(chaveCandidatura);
+            Candidatura candidaturaAlvo = this.candidaturaEncontrada;
             
             Entrevista novaEntrevista = new Entrevista(
                 candidaturaAlvo.getVaga(), 
                 candidaturaAlvo.getCandidato(), 
                 dataParseada, 
                 nomeAvaliador, 
-                notaParseada // Passando 0.0
+                notaParseada 
             );
 
             ArrayList<Entrevista> listaEntrevistas = Helper.getInstance().getEntrevistas();
@@ -203,6 +234,15 @@ public class RecrutamentoMarcarEntrevista extends JFrame {
                 "Entrevista para " + candidaturaAlvo.getCandidato().getNome() + " agendada com sucesso!", 
                 "Agendamento Efetuado", 
                 JOptionPane.INFORMATION_MESSAGE);
+            
+            // Reseta o formulário
+            txtCpfCandidato.setText("");
+            txtNomeCandidato.setText(""); // Limpa o novo campo
+            txtVagaAssociada.setText("");
+            txtData.setText("");
+            btnSalvar.setEnabled(false);
+            txtData.setEnabled(false);
+            this.candidaturaEncontrada = null;
                 
         } catch (DateTimeParseException e) {
             JOptionPane.showMessageDialog(this, "Formato de Data inválido. Use dd/MM/yyyy.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
