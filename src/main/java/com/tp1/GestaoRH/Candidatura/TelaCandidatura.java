@@ -285,7 +285,7 @@ public class TelaCandidatura extends javax.swing.JFrame {
 
     private void keyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_keyTyped
        String num = "0123456789";
-        if (num.indexOf(evt.getKeyChar()) == -1){
+        if (num.indexOf(evt.getKeyChar()) == -1 || cpf.getText().length()>= 11 + 3){
         evt.consume();
     }
          

@@ -102,6 +102,11 @@ public class TelaCadastroCandidato extends javax.swing.JFrame {
                 NomeActionPerformed(evt);
             }
         });
+        Nome.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                NomeKeyTyped(evt);
+            }
+        });
 
         Horario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,7 +153,7 @@ public class TelaCadastroCandidato extends javax.swing.JFrame {
 
         Telefone.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                TelaCadastroCandidato.this.keyTyped(evt);
+                TelefoneKeyTyped(evt);
             }
         });
 
@@ -393,10 +398,14 @@ return;
 
     private void keyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_keyTyped
               String num = "0123456789";
-        if (num.indexOf(evt.getKeyChar()) == -1){
+        if (num.indexOf(evt.getKeyChar()) == -1 || CPF.getText().length()>= 11 + 3){
         evt.consume(); }
     }//GEN-LAST:event_keyTyped
 
+        private void keyTypedTelefone(java.awt.event.KeyEvent evt) {                          
+
+    }     
+    
     private void VagaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VagaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_VagaActionPerformed
@@ -404,6 +413,18 @@ return;
     private void HorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HorarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_HorarioActionPerformed
+
+    private void TelefoneKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TelefoneKeyTyped
+                     String num = "0123456789";
+        if (num.indexOf(evt.getKeyChar()) == -1 || Telefone.getText().length()>= 15){
+        evt.consume(); }
+    }//GEN-LAST:event_TelefoneKeyTyped
+
+    private void NomeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NomeKeyTyped
+                            String num = "0123456789";
+        if (num.indexOf(evt.getKeyChar()) != -1){
+        evt.consume(); }     
+    }//GEN-LAST:event_NomeKeyTyped
 
     /**
      * @param args the command line arguments

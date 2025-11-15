@@ -8,8 +8,7 @@ import com.tp1.GestaoRH.Misc.Constantes;
 import com.tp1.GestaoRH.Misc.Helper;
 import com.tp1.GestaoRH.dominio.RepositorioUsuario;
 import java.awt.Desktop;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.Toolkit;
 import java.io.File;
 
 import java.security.InvalidParameterException;
@@ -71,10 +70,26 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
         Status.addItem(Constantes.CANDIDATOSTATUS.APROVADO.toString());
         Status.addItem(Constantes.CANDIDATOSTATUS.REJEITADO.toString());
         Helper.getInstance().listarVagas(Vaga);
-        tabelinha.getColumnModel().getSelectionModel().addListSelectionListener(new OptionListener(this.Salvar1, tabelinha));
-        tabelinha.getColumnModel().getSelectionModel().addListSelectionListener(new OptionListener(this.Exluir, tabelinha));
-        tabelinha.getColumnModel().getSelectionModel().addListSelectionListener(new OptionListener(this.AddDoc, tabelinha));
-        tabelinha.getColumnModel().getSelectionModel().addListSelectionListener(new OptionListener(this.AbrirDoc, tabelinha));
+        tabelinha.getSelectionModel().addListSelectionListener(new OptionListener(this.Salvar1, tabelinha));
+        tabelinha.getSelectionModel().addListSelectionListener(new OptionListener(this.Exluir, tabelinha));
+        tabelinha.getSelectionModel().addListSelectionListener(new OptionListener(this.AddDoc, tabelinha));
+        tabelinha.getSelectionModel().addListSelectionListener(new OptionListener(this.AbrirDoc, tabelinha));
+        
+        tabelinha.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        
+            @Override 
+                public void valueChanged(ListSelectionEvent e) {
+                        if (tabelinha.getSelectedRow() != -1){
+                            System.out.println("teste!!");
+                            jTextArea1.setText(candidatos.get(tabelinha.getSelectedRow()).getCandidato().getExperienciaProfissional());
+                        } else jTextArea1.setText("");
+                        }
+        });
+        
+        tabelinha.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+        
+        
     }
     
 
@@ -168,10 +183,13 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
         Status = new javax.swing.JComboBox<>();
         AbrirDoc = new javax.swing.JButton();
         AddDoc = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         jScrollPane1.setViewportView(null);
 
         tabelinha.setModel(new javax.swing.table.DefaultTableModel(
@@ -194,6 +212,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel1.setText("Filtros");
 
         Salvar1.setText("Salvar");
@@ -222,9 +241,21 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
             }
         });
 
+        Nome.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                NomeKeyTyped(evt);
+            }
+        });
+
         cpf.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 TelaBuscaCandidato.this.keyTyped(evt);
+            }
+        });
+
+        endereco.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                enderecoKeyTyped(evt);
             }
         });
 
@@ -257,6 +288,53 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
                 AddDocActionPerformed(evt);
             }
         });
+
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("Formação Profissional");
+        jLabel7.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        jTextArea1.setEditable(false);
+        jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jTextArea1.setLineWrap(true);
+        jTextArea1.setRows(5);
+        jTextArea1.setText("Selecione um candidato para mostrar sua formação\n");
+        jTextArea1.setWrapStyleWord(true);
+        jScrollPane2.setViewportView(jTextArea1);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 330, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
+                    .addContainerGap()))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addContainerGap(32, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -292,12 +370,14 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
                             .addComponent(AddDoc, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(335, Short.MAX_VALUE))
+                .addGap(31, 31, 31)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(42, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(55, 55, 55)
                     .addComponent(Salvar1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(1023, Short.MAX_VALUE)))
+                    .addContainerGap(1091, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -333,12 +413,17 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(Exluir, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(67, 67, 67))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(409, Short.MAX_VALUE)
+                    .addContainerGap(410, Short.MAX_VALUE)
                     .addComponent(Salvar1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(11, 11, 11)))
         );
@@ -395,7 +480,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
 
     private void keyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_keyTyped
                String num = "0123456789";
-        if (num.indexOf(evt.getKeyChar()) == -1){
+        if (num.indexOf(evt.getKeyChar()) == -1 || cpf.getText().length()>= 11 + 3){
         evt.consume(); }
     }//GEN-LAST:event_keyTyped
 
@@ -452,6 +537,18 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_AddDocActionPerformed
 
+    private void NomeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NomeKeyTyped
+                                   String num = "0123456789";
+        if (num.indexOf(evt.getKeyChar()) != -1){
+        evt.consume(); }  
+    }//GEN-LAST:event_NomeKeyTyped
+
+    private void enderecoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_enderecoKeyTyped
+               String num = "0123456789";
+        if (num.indexOf(evt.getKeyChar()) == -1 || endereco.getText().length()>= 11 + 4){
+        evt.consume(); }
+    }//GEN-LAST:event_enderecoKeyTyped
+
     /**
      * @param args the command line arguments
      */
@@ -494,7 +591,11 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTable tabelinha;
     // End of variables declaration//GEN-END:variables
 }
