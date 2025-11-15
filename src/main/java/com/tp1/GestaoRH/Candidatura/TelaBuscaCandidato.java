@@ -457,7 +457,7 @@ public class TelaBuscaCandidato extends javax.swing.JFrame {
                         return;
                }
                 candidatos = Helper.getInstance().getCandidatura();
-                if (candidatos.get(tabelinha.getSelectedRow()).getStatus().equals("Em Analise") == false){
+                if (candidatos.get(tabelinha.getSelectedRow()).getStatus().toLowerCase().equals("Pendente") == false){
                     JOptionPane.showMessageDialog(rootPane, "Candidato não pode ser excluido, dado que seu Status não está pendente", "Exclusão Negada", JOptionPane.ERROR_MESSAGE);
                     return;
                 }

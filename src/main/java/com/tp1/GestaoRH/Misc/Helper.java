@@ -118,6 +118,7 @@ public class Helper {
     
         List<Vaga> v = RecrutamentoPersistencia.carregarVagas();
         for (Vaga va : v){
+            if (va.getStatus() == Constantes.STATUS.FECHADA){continue;}
             j.addItem(va.getCargo());
         }
     }

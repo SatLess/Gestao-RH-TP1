@@ -54,7 +54,6 @@
                               </Group>
                           </Group>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jbtnAddDocumento" min="-2" pref="150" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="Horario" min="-2" pref="74" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -64,7 +63,10 @@
                               </Group>
                               <Component id="Salario" alignment="0" max="32767" attributes="0"/>
                               <Component id="Vaga" alignment="0" max="32767" attributes="0"/>
-                              <Component id="Formacao" max="32767" attributes="0"/>
+                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="Formacao" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jbtnAddDocumento" alignment="0" pref="150" max="32767" attributes="0"/>
+                              </Group>
                           </Group>
                           <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                       </Group>
@@ -269,6 +271,11 @@
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="Formacao">
+      <Properties>
+        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[68, 26]"/>
+        </Property>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="jbtnAddDocumento">
       <Properties>
