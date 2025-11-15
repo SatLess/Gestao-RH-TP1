@@ -4,22 +4,19 @@ import com.tp1.GestaoRH.Candidatura.Candidatura;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-// 1. Deve ser Serializable para o Helper salvar
 public class Contratacao implements Serializable {
 
-    // 2. Armazena a CANDIDATURA inteira (o link "Quem-Para-Qual-Vaga")
     private Candidatura candidaturaAprovada;
-    
-    // 3. Os dados do Requisito 2
-    private String regime; // "CLT", "Estágio", "PJ"
+    private String regime; 
     private LocalDate dataContratacao;
-
-    private String statusAutorizacao; // Ex: "PENDENTE_GESTOR"
+    private String statusAutorizacao; 
 
     public Contratacao(Candidatura candidaturaAprovada, String regime, LocalDate dataContratacao) {
-        if (!"Aprovado".equals(candidaturaAprovada.getStatus())) {
+
+        if (!"Aprovado".equalsIgnoreCase(candidaturaAprovada.getStatus())) {
             throw new IllegalArgumentException("Só é possível iniciar contratação de candidaturas APROVADAS.");
         }
+        
         this.candidaturaAprovada = candidaturaAprovada;
         this.regime = regime;
         this.dataContratacao = dataContratacao;
