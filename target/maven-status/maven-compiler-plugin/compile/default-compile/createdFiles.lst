@@ -41,6 +41,7 @@ com\tp1\GestaoRH\UI\MenuFinanceiro.class
 com\tp1\GestaoRH\Candidatura\TelaCandidatura$2.class
 com\tp1\GestaoRH\UI\RecrutamentoConsultarContratacoes$1.class
 com\tp1\GestaoRH\dominio\RepositorioUsuario.class
+com\tp1\GestaoRH\cadastro.class
 com\tp1\GestaoRH\Candidatura\TelaBuscaCandidato$8.class
 com\tp1\GestaoRH\UI\MenuRecrutamento$7.class
 com\tp1\GestaoRH\UI\RecrutamentoConsultarContratacoes.class
@@ -77,6 +78,7 @@ com\tp1\GestaoRH\UI\MenuRecrutamento$6.class
 com\tp1\GestaoRH\Candidatura\TelaCadastroCandidato.class
 com\tp1\GestaoRH\Candidatura\TelaCadastroCandidato$9.class
 com\tp1\GestaoRH\Candidatura\TelaBuscaCandidato$6.class
+com\tp1\GestaoRH\cadastro$1.class
 com\tp1\GestaoRH\Candidatura\TelaBuscaCandidato$10.class
 com\tp1\GestaoRH\Candidatura\Candidatura.class
 com\tp1\GestaoRH\dominio\FolhaPagamento.class

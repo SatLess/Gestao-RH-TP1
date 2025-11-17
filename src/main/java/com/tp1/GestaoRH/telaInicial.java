@@ -10,6 +10,7 @@ public class telaInicial extends JFrame {
     private JPasswordField senhaField;
     private JButton entrarBtn;
     private JButton sairBtn;
+    private JButton cadastroBtn;
 
     public telaInicial() {
         super("Login - Gestão RH");
@@ -30,6 +31,7 @@ public class telaInicial extends JFrame {
         add(new JLabel("Senha:"));
         senhaField = new JPasswordField();
         add(senhaField);
+      
 
         entrarBtn = new JButton("Entrar");
         entrarBtn.addActionListener(e -> autenticar());
@@ -38,6 +40,11 @@ public class telaInicial extends JFrame {
         sairBtn = new JButton("Sair");
         sairBtn.addActionListener(e -> System.exit(0));
         add(sairBtn);
+        
+        cadastroBtn = new JButton("Cadastro");
+        cadastroBtn.addActionListener(e -> new cadastro().setVisible(true));
+        add(cadastroBtn);
+        
     }
 
     private void autenticar() {
