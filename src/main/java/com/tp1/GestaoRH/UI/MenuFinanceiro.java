@@ -7,7 +7,7 @@ public class MenuFinanceiro extends JFrame {
     
     private final String tipoUsuario;
     
-    private JButton consulta, regras, gerar, relatorio, beneficios, historico, contracheques, voltar;
+    private JButton consulta, regras, gerar, relatorio, beneficios, contracheques, voltar;
     
     public MenuFinanceiro(String tipoUsuario) {
         super("Menu Financeiro - " + tipoUsuario);
@@ -31,7 +31,6 @@ public class MenuFinanceiro extends JFrame {
         gerar = new JButton("Folha de Pagamento");
         relatorio = new JButton("Relatório Financeiro");
         beneficios = new JButton("Benefícios");
-        historico = new JButton("Histórico Financeiro");
         contracheques = new JButton("Contracheques");
         voltar = new JButton("Voltar ao Login");
 
@@ -40,12 +39,11 @@ public class MenuFinanceiro extends JFrame {
         gerar.addActionListener(e -> {new TelaGerarFolhaPagamento(tipoUsuario).setVisible(true); dispose();});
         relatorio.addActionListener(e -> {new TelaRelatorioFinanceiro(tipoUsuario).setVisible(true); dispose();});
         beneficios.addActionListener(e -> {new TelaBeneficios(tipoUsuario).setVisible(true); dispose();});
-        historico.addActionListener(e -> {new TelaHistoricoFinanceiro(tipoUsuario).setVisible(true); dispose();});
         contracheques.addActionListener(e -> {new TelaContracheques(tipoUsuario).setVisible(true); dispose();});
         voltar.addActionListener(e -> { new telaInicial().setVisible(true); dispose(); });
 
         painel.add(consulta); painel.add(regras); painel.add(gerar); painel.add(relatorio);
-        painel.add(beneficios); painel.add(historico); painel.add(contracheques); painel.add(voltar);
+        painel.add(beneficios); painel.add(contracheques); painel.add(voltar);
 
         add(titulo, BorderLayout.NORTH);
         add(painel, BorderLayout.CENTER);
@@ -62,12 +60,14 @@ public class MenuFinanceiro extends JFrame {
         if (isAdmin) {
             // tudo liberado
             setAllEnabled(true);
+            beneficios.setEnabled(false);
         } 
         
         else if (isGestor) {
             // gestor pode quase tudo, mas não pode mexer em regras salariais
             setAllEnabled(true);
             regras.setEnabled(false);
+            beneficios.setEnabled(false);
         } 
             
         else if (isFuncionario) {
@@ -77,7 +77,6 @@ public class MenuFinanceiro extends JFrame {
             gerar.setEnabled(false);
             relatorio.setEnabled(false);
             beneficios.setEnabled(true);
-            historico.setEnabled(true);
             contracheques.setEnabled(true);
         } 
         
@@ -106,7 +105,6 @@ public class MenuFinanceiro extends JFrame {
         gerar.setEnabled(enabled);
         relatorio.setEnabled(enabled);
         beneficios.setEnabled(enabled);
-        historico.setEnabled(enabled);
         contracheques.setEnabled(enabled);
     }
 
