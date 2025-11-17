@@ -28,4 +28,14 @@ public class RepositorioFuncionario {
         lista.add(f);
         salvar(lista);
     }
+    public static Funcionario buscarPorNome(String nome) {
+        ArrayList<Funcionario> lista = carregar();
+        for (Funcionario f : lista) {
+            if (f.getNome().equalsIgnoreCase(nome)) {
+                return f;
+            }
+        }
+        return null;
+    }
+
 }
