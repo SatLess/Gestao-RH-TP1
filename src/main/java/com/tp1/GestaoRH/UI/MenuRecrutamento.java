@@ -62,7 +62,8 @@ public class MenuRecrutamento extends javax.swing.JFrame {
         if (cargo.equals("GestorRH")) {
             
             if (indexCandidatura != -1) {
-                 jTabbedPane1.setEnabledAt(indexCandidatura, false); // Desabilita a aba inteira
+                 Cadastro.setEnabled(false); // Desabilita a aba inteira
+                 Inscricao.setEnabled(false);
             }
 
             jButton3.setEnabled(false); // Marcar Entrevista
@@ -79,7 +80,7 @@ public class MenuRecrutamento extends javax.swing.JFrame {
             }
             
         } else {
-            jTabbedPane1.setEnabled(false);
+            
         }
     }
     

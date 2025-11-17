@@ -12,7 +12,6 @@ C:\Users\spiri\Documents\NetBeansProjects\Gestao-de-RH\src\main\java\com\tp1\Ges
 C:\Users\spiri\Documents\NetBeansProjects\Gestao-de-RH\src\main\java\com\tp1\GestaoRH\dominio\Funcionario.java
 C:\Users\spiri\Documents\NetBeansProjects\Gestao-de-RH\src\main\java\com\tp1\GestaoRH\dominio\PersistenciaException.java
 C:\Users\spiri\Documents\NetBeansProjects\Gestao-de-RH\src\main\java\com\tp1\GestaoRH\dominio\Pessoa.java
-C:\Users\spiri\Documents\NetBeansProjects\Gestao-de-RH\src\main\java\com\tp1\GestaoRH\dominio\Recrutador.java
 C:\Users\spiri\Documents\NetBeansProjects\Gestao-de-RH\src\main\java\com\tp1\GestaoRH\dominio\RecrutamentoPersistencia.java
 C:\Users\spiri\Documents\NetBeansProjects\Gestao-de-RH\src\main\java\com\tp1\GestaoRH\dominio\RegraInvalidaException.java
 C:\Users\spiri\Documents\NetBeansProjects\Gestao-de-RH\src\main\java\com\tp1\GestaoRH\dominio\RegraSalario.java
@@ -34,6 +33,7 @@ C:\Users\spiri\Documents\NetBeansProjects\Gestao-de-RH\src\main\java\com\tp1\Ges
 C:\Users\spiri\Documents\NetBeansProjects\Gestao-de-RH\src\main\java\com\tp1\GestaoRH\UI\RecrutamentoSolicitarContratacao.java
 C:\Users\spiri\Documents\NetBeansProjects\Gestao-de-RH\src\main\java\com\tp1\GestaoRH\UI\TelaBeneficios.java
 C:\Users\spiri\Documents\NetBeansProjects\Gestao-de-RH\src\main\java\com\tp1\GestaoRH\UI\TelaCadastroFuncionario.java
+C:\Users\spiri\Documents\NetBeansProjects\Gestao-de-RH\src\main\java\com\tp1\GestaoRH\UI\TelaConsultaFuncionarios.java
 C:\Users\spiri\Documents\NetBeansProjects\Gestao-de-RH\src\main\java\com\tp1\GestaoRH\UI\TelaContracheques.java
 C:\Users\spiri\Documents\NetBeansProjects\Gestao-de-RH\src\main\java\com\tp1\GestaoRH\UI\TelaGerarFolhaPagamento.java
 C:\Users\spiri\Documents\NetBeansProjects\Gestao-de-RH\src\main\java\com\tp1\GestaoRH\UI\TelaHistoricoFinanceiro.java
