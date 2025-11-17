@@ -6,7 +6,6 @@ package com.tp1.GestaoRH.Misc;
 import com.tp1.GestaoRH.Candidatura.Candidatura;
 import com.tp1.GestaoRH.Misc.Constantes.STATUS;
 import com.tp1.GestaoRH.dominio.Entrevista;
-import com.tp1.GestaoRH.dominio.Recrutador;
 import com.tp1.GestaoRH.dominio.RecrutamentoPersistencia;
 
 import java.io.FileInputStream;
