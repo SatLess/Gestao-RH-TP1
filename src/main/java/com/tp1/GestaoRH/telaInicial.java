@@ -1,6 +1,5 @@
 package com.tp1.GestaoRH;
 
-import com.tp1.GestaoRH.UI.TelaCadastroFuncionario;
 import com.tp1.GestaoRH.dominio.*;
 import javax.swing.*;
 import java.awt.*;
@@ -69,7 +68,7 @@ public class telaInicial extends JFrame {
                 new com.tp1.GestaoRH.ADMGUI().setVisible(true);
                 new com.tp1.GestaoRH.UI.MenuFinanceiro("Administrador").setVisible(true);
                 new com.tp1.GestaoRH.UI.MenuRecrutamento().setVisible(true);
-                new TelaCadastroFuncionario(cargo).setVisible(true);
+                new com.tp1.GestaoRH.UI.TelaCadastroFuncionario("Administrador").setVisible(true);
             }
             case "GestorRH" -> {
                 new com.tp1.GestaoRH.UI.MenuFinanceiro("GestorRH").setVisible(true);

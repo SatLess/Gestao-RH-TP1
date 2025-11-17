@@ -24,6 +24,7 @@ public class TelaContracheques extends JFrame {
         super("Contracheques - " + tipoUsuario);
         this.tipoUsuario = tipoUsuario;
         init();
+        configurarAcesso();
     }
 
     private void init() {
@@ -173,6 +174,39 @@ public class TelaContracheques extends JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao gerar PDF: " + e.getMessage());
         }
+    }
+    
+    private void configurarAcesso() {
+        ArrayList<Funcionario> todos = RepositorioFuncionario.carregar();
+        funcionarioBox.removeAllItems();
+
+        if ("FuncionarioGeral".equalsIgnoreCase(tipoUsuario)) {
+            // PEGA O NOME DO FUNCIONÁRIO LOGADO
+            Usuario logado = RepositorioUsuario.usuarioLogado;
+            if (logado != null) {
+                String nomeLogado = null;
+                for (Funcionario f : todos) {
+                    if (f.getNome().equalsIgnoreCase(logado.getLogin()) || 
+                        f.getCpf().equals(logado.getLogin())) { // ajuste conforme seu sistema
+                        nomeLogado = f.getNome();
+                        break;
+                    }
+                }
+                if (nomeLogado != null) {
+                    funcionarioBox.addItem(nomeLogado);
+                    funcionarioBox.setEnabled(false); // não deixa trocar
+                    setTitle("Meus Contracheques - " + nomeLogado);
+                }
+            }
+        } else {
+            // Administrador e GestorRH veem todos
+            for (Funcionario f : todos) {
+                if (f.isAtivo()) {
+                    funcionarioBox.addItem(f.getNome());
+                }
+            }
+        }
+        carregarFolhas(); // carrega logo de cara
     }
 
     public static void main(String[] args) {
