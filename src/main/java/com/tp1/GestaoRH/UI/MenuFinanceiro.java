@@ -7,7 +7,7 @@ public class MenuFinanceiro extends JFrame {
     
     private final String tipoUsuario;
     
-    private JButton cadastro, regras, gerar, relatorio, beneficios, historico, contracheques, voltar;
+    private JButton consulta, regras, gerar, relatorio, beneficios, historico, contracheques, voltar;
     
     public MenuFinanceiro(String tipoUsuario) {
         super("Menu Financeiro - " + tipoUsuario);
@@ -26,25 +26,25 @@ public class MenuFinanceiro extends JFrame {
         JPanel painel = new JPanel(new GridLayout(4,2,12,12));
         painel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
-        cadastro = new JButton("Cadastro de Funcionário");
+        consulta = new JButton("Consulta de Funcionário");
         regras = new JButton("Configurar Regras Salariais");
-        gerar = new JButton("Gerar Folha de Pagamento");
+        gerar = new JButton("Folha de Pagamento");
         relatorio = new JButton("Relatório Financeiro");
         beneficios = new JButton("Benefícios");
         historico = new JButton("Histórico Financeiro");
         contracheques = new JButton("Contracheques");
         voltar = new JButton("Voltar ao Login");
 
-        cadastro.addActionListener(e -> new TelaCadastroFuncionario(tipoUsuario).setVisible(true));
-        regras.addActionListener(e -> new TelaRegraSalarial(tipoUsuario).setVisible(true));
-        gerar.addActionListener(e -> new TelaGerarFolhaPagamento(tipoUsuario).setVisible(true));
-        relatorio.addActionListener(e -> new TelaRelatorioFinanceiro(tipoUsuario).setVisible(true));
-        beneficios.addActionListener(e -> new TelaBeneficios(tipoUsuario).setVisible(true));
-        historico.addActionListener(e -> new TelaHistoricoFinanceiro(tipoUsuario).setVisible(true));
-        contracheques.addActionListener(e -> new TelaContracheques(tipoUsuario).setVisible(true));
+        consulta.addActionListener(e -> {new TelaConsultaFuncionarios(tipoUsuario).setVisible(true); dispose();});
+        regras.addActionListener(e -> {new TelaRegraSalarial(tipoUsuario).setVisible(true); dispose();});
+        gerar.addActionListener(e -> {new TelaGerarFolhaPagamento(tipoUsuario).setVisible(true); dispose();});
+        relatorio.addActionListener(e -> {new TelaRelatorioFinanceiro(tipoUsuario).setVisible(true); dispose();});
+        beneficios.addActionListener(e -> {new TelaBeneficios(tipoUsuario).setVisible(true); dispose();});
+        historico.addActionListener(e -> {new TelaHistoricoFinanceiro(tipoUsuario).setVisible(true); dispose();});
+        contracheques.addActionListener(e -> {new TelaContracheques(tipoUsuario).setVisible(true); dispose();});
         voltar.addActionListener(e -> { new telaInicial().setVisible(true); dispose(); });
 
-        painel.add(cadastro); painel.add(regras); painel.add(gerar); painel.add(relatorio);
+        painel.add(consulta); painel.add(regras); painel.add(gerar); painel.add(relatorio);
         painel.add(beneficios); painel.add(historico); painel.add(contracheques); painel.add(voltar);
 
         add(titulo, BorderLayout.NORTH);
@@ -69,10 +69,10 @@ public class MenuFinanceiro extends JFrame {
             setAllEnabled(true);
             regras.setEnabled(false);
         } 
-        
+            
         else if (isFuncionario) {
             // funcionário só pode ver benefícios, histórico e contracheques
-            cadastro.setEnabled(false);
+            consulta.setEnabled(false);
             regras.setEnabled(false);
             gerar.setEnabled(false);
             relatorio.setEnabled(false);
@@ -101,7 +101,7 @@ public class MenuFinanceiro extends JFrame {
     // Método utilitário para habilitar/desabilitar todos os botões
     
     private void setAllEnabled(boolean enabled) {
-        cadastro.setEnabled(enabled);
+        consulta.setEnabled(enabled);
         regras.setEnabled(enabled);
         gerar.setEnabled(enabled);
         relatorio.setEnabled(enabled);
