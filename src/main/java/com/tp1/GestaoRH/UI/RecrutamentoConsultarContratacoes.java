@@ -1,9 +1,11 @@
 package com.tp1.GestaoRH.UI;
 
+import com.tp1.GestaoRH.dominio.*;
 import com.tp1.GestaoRH.dominio.Contratacao;
 import com.tp1.GestaoRH.dominio.Entrevista;
 import com.tp1.GestaoRH.Misc.Helper;
 import com.tp1.GestaoRH.Misc.Constantes;
+import com.tp1.GestaoRH.dominio.Funcionario;
 import com.tp1.GestaoRH.dominio.RepositorioUsuario;
 import com.tp1.GestaoRH.dominio.Vaga; // Importação necessária
 import com.tp1.GestaoRH.dominio.RecrutamentoPersistencia; // Importação necessária
@@ -188,9 +190,48 @@ public class RecrutamentoConsultarContratacoes extends JFrame {
                 carregarContratacoes();
                 JOptionPane.showMessageDialog(this, "Contratação autorizada e vaga fechada com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 
+                criarFuncionarioAPartirDaContratacao(contratacaoAlvo);
+                
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Erro ao salvar autorização: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
+        }
+    }
+    
+    private void criarFuncionarioAPartirDaContratacao(Contratacao contratacao) {
+        try {
+            var candidatura = contratacao.getCandidaturaAprovada();
+            var candidato = candidatura.getCandidato();
+            var vaga = candidatura.getVaga();
+
+            Funcionario novo;
+            novo = new Funcionario(
+                    candidato.getNome(),
+                    candidato.getEmail() != null ? candidato.getEmail() : "",
+                    candidato.getEndereço() != null ? candidato.getEndereço() : "",
+                    candidato.getCpf(),
+                    vaga.getDepartamento() != null ? vaga.getDepartamento() : "Não informado",
+                    candidato.getTelefone() != null ? candidato.getTelefone() : "",
+                    vaga.getCargo(),
+                    vaga.getSalarioBase(),
+                    contratacao.getRegime(),
+                    true
+            );
+
+            RepositorioFuncionario.adicionar(novo);
+
+            JOptionPane.showMessageDialog(this,
+                "Funcionário criado automaticamente no módulo financeiro!\n" +
+                novo.getNome() + " (" + novo.getCargo() + ") - R$ " + 
+                String.format("%.2f", novo.getSalarioBase()),
+                "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+
+        }
+        catch (HeadlessException ex) {
+            JOptionPane.showMessageDialog(this,
+            "Erro ao criar funcionário: " + ex.getMessage(),
+            "Erro", JOptionPane.ERROR_MESSAGE);
+    
         }
     }
 
